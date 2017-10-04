@@ -305,7 +305,7 @@ public final class JsonDiff {
 		BUNDLE.checkNotNull(source, "common.nullArgument");
 		BUNDLE.checkNotNull(target, "common.nullArgument");
 
-		final Map<JsonPointer, JsonNode> unchanged = getUnchangedValues(source, target);
+		final Map<JsonPointer, JsonNode> unchanged =  Maps.newHashMap();
 		final DiffProcessor processor = new DiffProcessor(unchanged);
 
 		generateDiffs(processor, JsonPointer.empty(), source, target, attributesKeyFields);
@@ -451,8 +451,10 @@ public final class JsonDiff {
 		 * This loop evaluates the common elements in both nodes
 		 */
 		for (final String field : Sets.intersection(firstFields, secondFields)) {
-			// REPLACE OR COMMON Elements
-			generateDiffs(processor, pointer.append(field), source.get(field), target.get(field), attributeKeyFields);
+			// REPLACE //Neglecting COMMON Elements
+			if (!(EQUIVALENCE.equivalent(source.get(field), target.get(field)))){
+				generateDiffs(processor, pointer.append(field), source.get(field), target.get(field), attributeKeyFields);
+			}
 		}
 	}
 

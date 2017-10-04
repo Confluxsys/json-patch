@@ -3,13 +3,12 @@
 <suite name="Failed suite [Default suite]">
   <test name="Default test(failed)">
     <classes>
-      <class name="com.github.fge.jsonpatch.diffcustom.TestJsonDiff">
+      <class name="com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom">
         <methods>
-          <include name="testBugFixWhileOldStateNullAndNewStateArray"/>
+          <include name="testArrayOperation" invocation-numbers="0 1 2"/>
           <include name="initialize"/>
-          <include name="testBugFixWhileOldStateArrayAndNewStateNull"/>
         </methods>
-      </class> <!-- com.github.fge.jsonpatch.diffcustom.TestJsonDiff -->
+      </class> <!-- com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

@@ -1,145 +1,129 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="8" passed="8">
+<testng-results skipped="0" failed="0" total="7" passed="7">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="271" started-at="2017-10-04T11:23:32Z" finished-at="2017-10-04T11:23:32Z">
+  <suite name="Default suite" duration-ms="318" started-at="2017-10-04T13:40:45Z" finished-at="2017-10-04T13:40:45Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="271" started-at="2017-10-04T11:23:32Z" finished-at="2017-10-04T11:23:32Z">
-      <class name="com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom">
-        <test-method status="PASS" signature="initialize()[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="initialize" is-config="true" duration-ms="10" started-at="2017-10-04T16:53:32Z" finished-at="2017-10-04T16:53:32Z">
+    <test name="Default test" duration-ms="318" started-at="2017-10-04T13:40:45Z" finished-at="2017-10-04T13:40:45Z">
+      <class name="com.github.fge.jsonpatch.diffcustom.TestJsonDiff">
+        <test-method status="PASS" signature="initialize()[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="initialize" is-config="true" duration-ms="60" started-at="2017-10-04T19:10:45Z" finished-at="2017-10-04T19:10:45Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initialize -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="68" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="59" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{"a":[{"a":"b"},{"a":"x","b":"c"}]}]]>
+                <![CDATA[{"Active":"1","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":{"ConfluxSys":"a"},"Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Grouppp":[{"a":"1","b":"2"}],"IT Resource":"504"}]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[{"a":[{"a":"b"}]}]]>
+                <![CDATA[{"Active":"1","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":{"ConfluxSys":"a"},"Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Grouppp":[{"a":"3","b":"2"}],"IT Resource":"504"}]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="5" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="11" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{"a":[{"a":"b"}]}]]>
+                <![CDATA[{"Active":"2","Email":"cphatt@abc.com","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[{"a":[{"a":"b"},{"a":"x","b":"c"}]}]]>
+                <![CDATA[{"Active":"2","Nickname":"CHRISPHATT","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="6" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="5" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{"a":[{"a":"b","b":"a"}]}]]>
+                <![CDATA[{"Active":"3","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Email":"cphatt@abc.com","Groups":[{"Group":"504~QA Managers"}],"Roles":[{"Role":"Jr. Manager","name":"Ritesh","Positon":"Trainee","Nickname":"RSF"}],"IT Resource":"504"}]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[{"a":[{"a":"b","b":"c"}]}]]>
+                <![CDATA[{"Active":"3","Email":"cphatt@abc.com","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Roles":[{"Role":"Jr. Manager","name":"Ritesh","Company":"Confluxsys","Positon":"Trainee"}],"IT Resource":"504"}]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="3" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="3" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{"a":[{"a":"b","b":"c"}]}]]>
+                <![CDATA[{"Active":"4","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"},{"Group":"504~DEV Managers"}],"IT Resource":"504"}]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[{"a":[{"a":"b","b":"a"}]}]]>
+                <![CDATA[{"Active":"4","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="3" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="4" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{"a":[{"a":"b"}]}]]>
+                <![CDATA[{"Active":"5","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers","name":"RSFERO","Company":"Confluxsys"}],"IT Resource":"504"}]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[{"a":[{"a":"b"},{"a":"x","b":"c"}]}]]>
+                <![CDATA[{"Active":"5","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers","Company":"IAM ","Position":"Developer"}],"IT Resource":"504"}]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="3" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="3" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{"a":[{"a":"b"},{"a":"x","b":"c"}]}]]>
+                <![CDATA[{"Active":"6","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":["aa","bb"],"Groups":{},"Roles":[{"Role":"Manager"},{"Role":"Dev"}],"IT Resource":[],"Resource IT ":null,"User Licenses":[{"License":"Manager"},{"License":"junior"}]}]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[{"a":[{"a":"b"}]}]]>
+                <![CDATA[{"Active":"6","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","IT Resource":null,"Resource IT ":[],"First Name":["ba","bc"],"User Licenses":[]}]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="4" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="2" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{"Application Entitlement":null,"Role in VEM":{},"Application Role":[]}]]>
+                <![CDATA[{"Roles":[{"Role":"Manager","name":"Ritesh","Positon":"Permanent","Company":"Confluxsys"}]}]]>
               </value>
             </param>
             <param index="1">
               <value>
-                <![CDATA[{"Application Entitlement":[{"Value":"CFX_Value_11","Entitlement Name":"624~Web Chatter"}],"Role in VEM":[{"Role":"624~Security Auditors","Organization or Bid Number":"Confluxsys","Update Timestamp":"15042479426"}],"Application Role":[]}]]>
+                <![CDATA[{"Roles":[{"Role":"Manager","name":"Ritesh","Positon":"Permanent","Company":"Confluxsys"}]}]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-        <test-method status="PASS" signature="testArrayOperation(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom@4f933fd1]" name="testArrayOperation" duration-ms="3" started-at="2017-10-04T16:53:32Z" data-provider="Array Operation" finished-at="2017-10-04T16:53:32Z">
-          <params>
-            <param index="0">
-              <value>
-                <![CDATA[{"Application Entitlement":[{"Value":"CFX_Value_11","Entitlement Name":"624~Web Chatter"}],"Role in VEM":[{"Role":"624~Security Auditors","Organization or Bid Number":"Confluxsys","Update Timestamp":"15042479426"}],"Application Role":[]}]]>
-              </value>
-            </param>
-            <param index="1">
-              <value>
-                <![CDATA[{"Application Entitlement":null,"Role in VEM":{},"Application Role":[]}]]>
-              </value>
-            </param>
-          </params>
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testArrayOperation -->
-      </class> <!-- com.github.fge.jsonpatch.diffcustom.TestJsonDiffCustom -->
+        </test-method> <!-- Computing -->
+      </class> <!-- com.github.fge.jsonpatch.diffcustom.TestJsonDiff -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
