@@ -58,7 +58,7 @@ provided the Map<JsonPointer, String> has {"/a": "b"}
 
 Remove Operation
 ```json
-source     :  { "a": [ { "a": "b" }, { "a": "x", "b": "c"	} ] }
+source     :  { "a": [ { "a": "b" }, { "a": "x", "b": "c" } ] }
 target     :  { "a": [ { "a": "b" } ] }
 Difference :  [ { "op": "remove", "path": "/a/1", "original_value": { "a": "x", "b": "c" } } ]
 ```
