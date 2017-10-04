@@ -1,6 +1,6 @@
-## Ritesh builds now enabled
+## Confluxsys builds now enabled
 
-Builds are now verified by Ritesh
+Builds are now verified by Confluxsys
 
 ## What this is
 
@@ -16,9 +16,6 @@ Its features are:
 * full support for RFC 6902 operations, including `test`;
 * JSON "diff" (RFC 6902 and custom) with custom operations factorization.
 
-## Versions
-
-The current version is **1.0**. See file `RELEASE-NOTES.md` for details.
 
 ## Using it in your project
 
@@ -49,15 +46,27 @@ the implementation will return the following patch:
 
 ## JSON "diff" customization
 
-The Custom diff only compute difference in form of add, remove and replace. The add, remove and replace operation is same as specified in rfc6901 but only in case of object,there is change in case of array diff operations the remove and replace operations have attached extra {Key: value} of original_value: value which helps us to keep track of the state before the difference was calculated. 
+The Custom diff only compute difference in form of add, remove and replace. The add, remove and replace operation is same as specified in rfc6901 but only in case of object,there is change in case of array diff operations the remove and replace operations have attached extra {original_value: value} which helps us to keep track of the state before the difference was calculated. 
 
-In case of Absense of Key the Algorithm treats whole object as Key and cant be used for calculation of fine-grained difference between the JsonNode
-
+In case of Absense of Key the Algorithm treats whole object as Key and calculates fine-grained difference between the JsonNode.
 
 This Library Supports Custom Operation in Case of Array
-as ...(In-progress)
+as ...
+```json
+Remove Operation
+source     :  { "a": [ { "a": "b" }, { "a": "x", "b": "c"	} ] }
+target     :  { "a": [ { "a": "b" } ] }
+Difference :  [ { "op": "remove", "path": "/a/1", "original_value": { "a": "x", "b": "c" } } ]
+```
 
-
+and: 
+ 
+```json
+Replace Operation
+source     : { "a": [ { "a": "b", "b": "a" } ] }
+target     : { "a": [ { "a": "b", "b": "c" } ] }
+Difference : [ { "op": "replace", "path": "/a/0/b", "value": "c", "original_value": { "a": "b", "b": "a" } } ] 
+```
 It is able to do even more than that. See the test files in the project.
 
 ## Note about the `test` operation and numeric value equivalence

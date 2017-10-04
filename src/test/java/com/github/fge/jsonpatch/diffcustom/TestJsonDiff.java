@@ -77,7 +77,7 @@ public class TestJsonDiff {
 						}
 					}
 
-					//		Change in this code ::DONE			
+					//		FIXME ::DONE			
 					//					if (path.parent().get(afterNode).isArray()) {
 					//						for (int index = 0; index < afterNode.size(); index++) {
 					//							logger.debug("Before Node: {}", beforeNode);
@@ -143,44 +143,6 @@ public class TestJsonDiff {
 
 			}
 		}
-	}
-
-	@Test(testName = "Test to fix the bug that old state Key's value is null where as new State's Key-> Value is Array, operation is add and not replace...")
-	public void testBugFixWhileOldStateNullAndNewStateArray() throws JsonPointerException, JsonProcessingException, IOException {
-		attributesKeyFeilds = new HashMap<JsonPointer, String>();
-		attributesKeyFeilds.put(new JsonPointer("/Application Entitlement"), "Entitlement Name");
-		attributesKeyFeilds.put(new JsonPointer("/Role in VEM"), "Role");
-		attributesKeyFeilds.put(new JsonPointer("/Application Role"), "Role");
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode beforeNode = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/beforeNode.json"));
-		JsonNode afterNode = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/afterNode.json"));
-		try {
-			patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
-			logger.info("{}", patch.toString());
-		} catch (JsonPointerException e) {
-			logger.warn("WARNING : {} ", e.toString());
-		}
-
-	}
-
-	@Test(testName = "Test to fix the bug that old state Key's value is null where as new State's Key-> Value is Array, operation is add and not replace...")
-	public void testBugFixWhileOldStateArrayAndNewStateNull() throws JsonPointerException, JsonProcessingException, IOException {
-		attributesKeyFeilds = new HashMap<JsonPointer, String>();
-		attributesKeyFeilds.put(new JsonPointer("/Application Entitlement"), "Entitlement Name");
-		attributesKeyFeilds.put(new JsonPointer("/Role in VEM"), "Role");
-		attributesKeyFeilds.put(new JsonPointer("/Application Role"), "Role");
-		ObjectMapper objectMapper = new ObjectMapper();
-		//old State
-		JsonNode beforeNode = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/afterNode.json"));
-		//New State
-		JsonNode afterNode = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/beforeNode.json"));
-		try {
-			patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
-			logger.info("{}", patch.toString());
-		} catch (JsonPointerException e) {
-			logger.warn("WARNING : {} ", e.toString());
-		}
-
 	}
 
 }
