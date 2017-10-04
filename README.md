@@ -53,6 +53,10 @@ In case of Absense of Key the Algorithm treats whole object as Key and calculate
 This Library Supports Custom Operation in Case of Array
 as ...
 ```json
+provided the Map<JsonPointer, String> has {/a = b}
+```
+
+```json
 Remove Operation
 source     :  { "a": [ { "a": "b" }, { "a": "x", "b": "c"	} ] }
 target     :  { "a": [ { "a": "b" } ] }
