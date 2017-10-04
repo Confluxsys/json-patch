@@ -53,7 +53,7 @@ In case of Absense of Key the Algorithm treats whole object as Key and calculate
 This Library Supports Custom Operation in Case of Array
 as ...
 ```json
-provided the Map<JsonPointer, String> has {/a = b}
+provided the Map<JsonPointer, String> has {"/a" = "b"}
 ```
 
 ```json
