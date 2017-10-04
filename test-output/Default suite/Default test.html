@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>TestNG:  Default test</title>
+<link href="../testng.css" rel="stylesheet" type="text/css" />
+<link href="../my-testng.css" rel="stylesheet" type="text/css" />
+
+<style type="text/css">
+.log { display: none;} 
+.stack-trace { display: none;} 
+</style>
+<script type="text/javascript">
+<!--
+function flip(e) {
+  current = e.style.display;
+  if (current == 'block') {
+    e.style.display = 'none';
+    return 0;
+  }
+  else {
+    e.style.display = 'block';
+    return 1;
+  }
+}
+
+function toggleBox(szDivId, elem, msg1, msg2)
+{
+  var res = -1;  if (document.getElementById) {
+    res = flip(document.getElementById(szDivId));
+  }
+  else if (document.all) {
+    // this is the way old msie versions work
+    res = flip(document.all[szDivId]);
+  }
+  if(elem) {
+    if(res == 0) elem.innerHTML = msg1; else elem.innerHTML = msg2;
+  }
+
+}
+
+function toggleAllBoxes() {
+  if (document.getElementsByTagName) {
+    d = document.getElementsByTagName('div');
+    for (i = 0; i < d.length; i++) {
+      if (d[i].className == 'log') {
+        flip(d[i]);
+      }
+    }
+  }
+}
+
+// -->
+</script>
+
+</head>
+<body>
+<h2 align='center'>Default test</h2><table border='1' align="center">
+<tr>
+<td>Tests passed/Failed/Skipped:</td><td>9/0/0</td>
+</tr><tr>
+<td>Started on:</td><td>Fri Sep 29 17:08:39 IST 2017</td>
+</tr>
+<tr><td>Total time:</td><td>0 seconds (360 ms)</td>
+</tr><tr>
+<td>Included groups:</td><td></td>
+</tr><tr>
+<td>Excluded groups:</td><td></td>
+</tr>
+</table><p/>
+<small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-passed'>
+<tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.Computing()'><b>Computing</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff<br>Parameters: {"Active":"1","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":{"ConfluxSys":"a"},"Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Grouppp":[{"a":"1","b":"2"}],"IT Resource":"504"}, {"Active":"1","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":{"ConfluxSys":"a"},"Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Grouppp":[{"a":"3","b":"2"}],"IT Resource":"504"}</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.Computing()'><b>Computing</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff<br>Parameters: {"Active":"2","Email":"cphatt@abc.com","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}, {"Active":"2","Nickname":"CHRISPHATT","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.Computing()'><b>Computing</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff<br>Parameters: {"Active":"3","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Email":"cphatt@abc.com","Groups":[{"Group":"504~QA Managers"}],"Roles":[{"Role":"Jr. Manager","name":"Ritesh","Positon":"Trainee","Nickname":"RSF"}],"IT Resource":"504"}, {"Active":"3","Email":"cphatt@abc.com","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Roles":[{"Role":"Jr. Manager","name":"Ritesh","Company":"Confluxsys","Positon":"Trainee"}],"IT Resource":"504"}</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.Computing()'><b>Computing</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff<br>Parameters: {"Active":"4","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"},{"Group":"504~DEV Managers"}],"IT Resource":"504"}, {"Active":"4","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.Computing()'><b>Computing</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff<br>Parameters: {"Active":"5","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers","name":"RSFERO","Company":"Confluxsys"}],"IT Resource":"504"}, {"Active":"5","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers","Company":"IAM ","Position":"Developer"}],"IT Resource":"504"}</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.Computing()'><b>Computing</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff<br>Parameters: {"Active":"6","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":["aa","bb"],"Groups":{},"Roles":[{"Role":"Manager"},{"Role":"Dev"}],"IT Resource":[],"Resource IT ":null,"User Licenses":[{"License":"Manager"},{"License":"junior"}]}, {"Active":"6","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","IT Resource":null,"Resource IT ":[],"First Name":["ba","bc"],"User Licenses":[]}</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.Computing()'><b>Computing</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff<br>Parameters: {"Roles":[{"Role":"Manager","name":"Ritesh","Positon":"Permanent","Company":"Confluxsys"}]}, {"Roles":[{"Role":"Manager","name":"Ritesh","Positon":"Permanent","Company":"Confluxsys"}]}</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.testBugFixWhileOldStateArrayAndNewStateNull()'><b>testBugFixWhileOldStateArrayAndNewStateNull</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+<tr>
+<td title='com.github.fge.jsonpatch.diffcustom.TestJsonDiff.testBugFixWhileOldStateNullAndNewStateArray()'><b>testBugFixWhileOldStateNullAndNewStateArray</b><br>Test class: com.github.fge.jsonpatch.diffcustom.TestJsonDiff</td>
+<td></td>
+<td>0</td>
+<td>com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e</td></tr>
+</table><p>
+</body>
+</html>

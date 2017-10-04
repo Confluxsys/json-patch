@@ -1,0 +1,25 @@
+{
+	"Active": "1",
+	"Email": "cphatt@abc.com",
+	"Nickname": "CHRISPHATT",
+	"Username": "CHRISPHATT",
+	"Company": {
+		"ConfluxSys": "a"
+	},
+	"Department": "Development",
+	"Last Name": "Chris",
+	"Title": "Mrs",
+	"First Name": "Phatt",
+	"Groups": [
+		{
+			"Group": "504~QA Managers"
+		}
+	],
+	"Grouppp": [
+		{
+			"a": "1",
+			"b": "2"
+		}
+	],
+	"IT Resource": "504"
+}

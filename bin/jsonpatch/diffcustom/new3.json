@@ -1,0 +1,23 @@
+{
+	"Active": "3",
+	"Email": "cphatt@abc.com",
+	"Username": "RITESH",
+	"Company": "ConfluxSys",
+	"Department": "Development",
+	"Last Name": "Chris",
+	"Title": "Mrs",
+	"First Name": "Phatt",
+	"Groups": [
+		{
+			"Group": "504~QA Managers"
+		}
+	],
+	"Roles": [
+		{
+			"Role": "Jr. Manager",
+			"name": "Ritesh",
+			"Company": "Confluxsys",
+			"Positon":"Trainee"
+		}
+	],
+	"IT Resource": "504"}

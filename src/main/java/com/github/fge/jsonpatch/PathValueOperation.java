@@ -53,7 +53,7 @@ public abstract class PathValueOperation
     }
 
     @Override
-    public final void serialize(final JsonGenerator jgen,
+    public void serialize(final JsonGenerator jgen,
         final SerializerProvider provider)
         throws IOException, JsonProcessingException
     {
@@ -66,7 +66,7 @@ public abstract class PathValueOperation
     }
 
     @Override
-    public final void serializeWithType(final JsonGenerator jgen,
+    public void serializeWithType(final JsonGenerator jgen,
         final SerializerProvider provider, final TypeSerializer typeSer)
         throws IOException, JsonProcessingException
     {
@@ -74,7 +74,7 @@ public abstract class PathValueOperation
     }
 
     @Override
-    public final String toString()
+    public String toString()
     {
         return "op: " + op + "; path: \"" + path + "\"; value: " + value;
     }

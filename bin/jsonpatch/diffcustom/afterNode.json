@@ -1,0 +1,17 @@
+{
+	"Application Entitlement": [
+		{
+			"Value": "CFX_Value_11",
+			"Entitlement Name": "624~Web Chatter"
+		}
+	],
+	"Role in VEM": [
+		{
+			"Role": "624~Security Auditors",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "15042479426"
+		}
+	],
+	"Application Role": [
+	]
+}

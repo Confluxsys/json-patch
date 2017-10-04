@@ -19,6 +19,9 @@
 
 package com.github.fge.jsonpatch.diff;
 
+import com.github.fge.jsonpatch.ArrayObjectRemoveOperation;
+import com.github.fge.jsonpatch.ArrayObjectReplaceOperation;
+import com.github.fge.jsonpatch.diff.DiffOperation;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jsonpatch.AddOperation;
@@ -28,136 +31,121 @@ import com.github.fge.jsonpatch.MoveOperation;
 import com.github.fge.jsonpatch.RemoveOperation;
 import com.github.fge.jsonpatch.ReplaceOperation;
 
-final class DiffOperation
-{
-    private final Type type;
-    /* An op's "from", if any */
-    private final JsonPointer from;
-    /* Value displaced by this operation, if any */
-    private final JsonNode oldValue;
-    /* An op's "path", if any */
-    private final JsonPointer path;
-    /* An op's "value", if any */
-    private final JsonNode value;
+public final class DiffOperation {
+	private final Type type;
+	/* An op's "from", if any */
+	private final JsonPointer from;
+	/* Value displaced by this operation, if any */
+	private final JsonNode oldValue;
+	/* An op's "path", if any */
+	private final JsonPointer path;
+	/* An op's "value", if any */
+	private final JsonNode value;
 
-    static DiffOperation add(final JsonPointer path,
-        final JsonNode value)
-    {
-        return new DiffOperation(Type.ADD, null, null, path, value);
-    }
+	static DiffOperation add(final JsonPointer path, final JsonNode value) {
+		return new DiffOperation(Type.ADD, null, null, path, value);
+	}
 
-    static DiffOperation copy(final JsonPointer from,
-        final JsonPointer path, final JsonNode value)
-    {
-        return new DiffOperation(Type.COPY, from, null, path,
-            value);
-    }
+	static DiffOperation copy(final JsonPointer from, final JsonPointer path, final JsonNode value) {
+		return new DiffOperation(Type.COPY, from, null, path, value);
+	}
 
-    static DiffOperation move(final JsonPointer from,
-        final JsonNode oldValue, final JsonPointer path,
-        final JsonNode value)
-    {
-        return new DiffOperation(Type.MOVE, from, oldValue, path,
-            value);
-    }
+	static DiffOperation move(final JsonPointer from, final JsonNode oldValue, final JsonPointer path, final JsonNode value) {
+		return new DiffOperation(Type.MOVE, from, oldValue, path, value);
+	}
 
-    static DiffOperation remove(final JsonPointer from,
-        final JsonNode oldValue)
-    {
-        return new DiffOperation(Type.REMOVE, from, oldValue, null, null);
-    }
+	static DiffOperation remove(final JsonPointer from, final JsonNode oldValue) {
+		return new DiffOperation(Type.REMOVE, from, oldValue, null, null);
+	}
 
-    static DiffOperation replace(final JsonPointer from,
-        final JsonNode oldValue, final JsonNode value)
-    {
-        return new DiffOperation(Type.REPLACE, from, oldValue, null,
-            value);
-    }
+	static DiffOperation replace(final JsonPointer from, final JsonNode oldValue, final JsonNode value) {
+		return new DiffOperation(Type.REPLACE, from, oldValue, null, value);
+	}
 
-    private DiffOperation(final Type type, final JsonPointer from,
-        final JsonNode oldValue, final JsonPointer path,
-        final JsonNode value)
-    {
-        this.type = type;
-        this.from = from;
-        this.oldValue = oldValue;
-        this.path = path;
-        this.value = value;
-    }
+	static DiffOperation arrayObjectRemove(final JsonPointer from, final JsonNode oldValue) {
+		return new DiffOperation(Type.REMOVEARRAYOBJECT, from, oldValue, null, null);
+	}
 
-    Type getType()
-    {
-        return type;
-    }
+	static DiffOperation arrayObjectReplace(final JsonPointer from, final JsonNode oldValue, final JsonNode value) {
+		return new DiffOperation(Type.REPLACEARRAYOBJECT, from, oldValue, null, value);
+	}
 
-    JsonPointer getFrom()
-    {
-        return from;
-    }
+	private DiffOperation(final Type type, final JsonPointer from, final JsonNode oldValue, final JsonPointer path, final JsonNode value) {
+		this.type = type;
+		this.from = from;
+		this.oldValue = oldValue;
+		this.path = path;
+		this.value = value;
+	}
 
-    JsonNode getOldValue()
-    {
-        return oldValue;
-    }
+	Type getType() {
+		return type;
+	}
 
-    JsonPointer getPath()
-    {
-        return path;
-    }
+	JsonPointer getFrom() {
+		return from;
+	}
 
-    JsonNode getValue()
-    {
-        return value;
-    }
+	JsonNode getOldValue() {
+		return oldValue;
+	}
 
-    JsonPatchOperation asJsonPatchOperation()
-    {
-        return type.toOperation(this);
-    }
+	JsonPointer getPath() {
+		return path;
+	}
 
-    enum Type {
-        ADD
-            {
-                @Override
-                JsonPatchOperation toOperation(final DiffOperation op)
-                {
-                    return new AddOperation(op.path, op.value);
-                }
-            },
-        COPY
-        {
-            @Override
-            JsonPatchOperation toOperation(final DiffOperation op)
-            {
-                return new CopyOperation(op.from, op.path);
-            }
-        },
-        MOVE
-        {
-            @Override
-            JsonPatchOperation toOperation(final DiffOperation op)
-            {
-                return new MoveOperation(op.from, op.path);
-            }
-        },
-        REMOVE
-        {
-            @Override
-            JsonPatchOperation toOperation(final DiffOperation op)
-            {
-                return new RemoveOperation(op.from);
-            }
-        },
-        REPLACE
-        {
-            @Override
-            JsonPatchOperation toOperation(final DiffOperation op)
-            {
-                return new ReplaceOperation(op.from, op.value);
-            }
-        },
-        ;
+	JsonNode getValue() {
+		return value;
+	}
 
-        abstract JsonPatchOperation toOperation(final DiffOperation op);
-    }
+	JsonPatchOperation asJsonPatchOperation() {
+		return type.toOperation(this);
+	}
+
+	enum Type {
+		ADD {
+			@Override
+			JsonPatchOperation toOperation(final DiffOperation op) {
+				return new AddOperation(op.path, op.value);
+			}
+		},
+		COPY {
+			@Override
+			JsonPatchOperation toOperation(final DiffOperation op) {
+				return new CopyOperation(op.from, op.path);
+			}
+		},
+		MOVE {
+			@Override
+			JsonPatchOperation toOperation(final DiffOperation op) {
+				return new MoveOperation(op.from, op.path);
+			}
+		},
+		REMOVE {
+			@Override
+			JsonPatchOperation toOperation(final DiffOperation op) {
+				return new RemoveOperation(op.from);
+			}
+		},
+		REPLACE {
+			@Override
+			JsonPatchOperation toOperation(final DiffOperation op) {
+				return new ReplaceOperation(op.from, op.value);
+			}
+		},
+		REMOVEARRAYOBJECT {
+			@Override
+			JsonPatchOperation toOperation(final DiffOperation op) {
+				return new ArrayObjectRemoveOperation(op.from, op.oldValue);
+			}
+		},
+		REPLACEARRAYOBJECT {
+			@Override
+			JsonPatchOperation toOperation(final DiffOperation op) {
+				return new ArrayObjectReplaceOperation(op.from, op.oldValue, op.value);
+			}
+		},;
+
+		abstract JsonPatchOperation toOperation(final DiffOperation op);
+	}
 }

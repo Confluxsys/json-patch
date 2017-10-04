@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Default suite]">
+  <test name="Default test(failed)">
+    <classes>
+      <class name="com.github.fge.jsonpatch.diffcustom.TestJsonDiff">
+        <methods>
+          <include name="Computing" invocation-numbers="0 3 5"/>
+          <include name="initialize"/>
+        </methods>
+      </class> <!-- com.github.fge.jsonpatch.diffcustom.TestJsonDiff -->
+    </classes>
+  </test> <!-- Default test(failed) -->
+</suite> <!-- Failed suite [Default suite] -->

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="9" passed="9">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="360" started-at="2017-09-29T11:38:39Z" finished-at="2017-09-29T11:38:39Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="360" started-at="2017-09-29T11:38:39Z" finished-at="2017-09-29T11:38:39Z">
+      <class name="com.github.fge.jsonpatch.diffcustom.TestJsonDiff">
+        <test-method status="PASS" signature="initialize()[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="initialize" is-config="true" duration-ms="115" started-at="2017-09-29T17:08:39Z" finished-at="2017-09-29T17:08:39Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initialize -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="Computing" duration-ms="54" started-at="2017-09-29T17:08:39Z" data-provider="Provide Data To Json-Diff" finished-at="2017-09-29T17:08:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{"Active":"1","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":{"ConfluxSys":"a"},"Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Grouppp":[{"a":"1","b":"2"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[{"Active":"1","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":{"ConfluxSys":"a"},"Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Grouppp":[{"a":"3","b":"2"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="Computing" duration-ms="13" started-at="2017-09-29T17:08:39Z" data-provider="Provide Data To Json-Diff" finished-at="2017-09-29T17:08:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{"Active":"2","Email":"cphatt@abc.com","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[{"Active":"2","Nickname":"CHRISPHATT","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="Computing" duration-ms="3" started-at="2017-09-29T17:08:39Z" data-provider="Provide Data To Json-Diff" finished-at="2017-09-29T17:08:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{"Active":"3","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Email":"cphatt@abc.com","Groups":[{"Group":"504~QA Managers"}],"Roles":[{"Role":"Jr. Manager","name":"Ritesh","Positon":"Trainee","Nickname":"RSF"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[{"Active":"3","Email":"cphatt@abc.com","Username":"RITESH","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"Roles":[{"Role":"Jr. Manager","name":"Ritesh","Company":"Confluxsys","Positon":"Trainee"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="Computing" duration-ms="3" started-at="2017-09-29T17:08:39Z" data-provider="Provide Data To Json-Diff" finished-at="2017-09-29T17:08:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{"Active":"4","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"},{"Group":"504~DEV Managers"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[{"Active":"4","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="Computing" duration-ms="3" started-at="2017-09-29T17:08:39Z" data-provider="Provide Data To Json-Diff" finished-at="2017-09-29T17:08:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{"Active":"5","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers","name":"RSFERO","Company":"Confluxsys"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[{"Active":"5","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":"Phatt","Groups":[{"Group":"504~QA Managers","Company":"IAM ","Position":"Developer"}],"IT Resource":"504"}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="Computing" duration-ms="4" started-at="2017-09-29T17:08:39Z" data-provider="Provide Data To Json-Diff" finished-at="2017-09-29T17:08:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{"Active":"6","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","First Name":["aa","bb"],"Groups":{},"Roles":[{"Role":"Manager"},{"Role":"Dev"}],"IT Resource":[],"Resource IT ":null,"User Licenses":[{"License":"Manager"},{"License":"junior"}]}]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[{"Active":"6","Email":"cphatt@abc.com","Nickname":"CHRISPHATT","Username":"CHRISPHATT","Company":"ConfluxSys","Department":"Development","Last Name":"Chris","Title":"Mrs","IT Resource":null,"Resource IT ":[],"First Name":["ba","bc"],"User Licenses":[]}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="Computing" duration-ms="4" started-at="2017-09-29T17:08:39Z" data-provider="Provide Data To Json-Diff" finished-at="2017-09-29T17:08:39Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[{"Roles":[{"Role":"Manager","name":"Ritesh","Positon":"Permanent","Company":"Confluxsys"}]}]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[{"Roles":[{"Role":"Manager","name":"Ritesh","Positon":"Permanent","Company":"Confluxsys"}]}]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- Computing -->
+        <test-method status="PASS" signature="testBugFixWhileOldStateArrayAndNewStateNull()[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="testBugFixWhileOldStateArrayAndNewStateNull" duration-ms="6" started-at="2017-09-29T17:08:39Z" finished-at="2017-09-29T17:08:39Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testBugFixWhileOldStateArrayAndNewStateNull -->
+        <test-method status="PASS" signature="testBugFixWhileOldStateNullAndNewStateArray()[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@7c16905e]" name="testBugFixWhileOldStateNullAndNewStateArray" duration-ms="4" started-at="2017-09-29T17:08:39Z" finished-at="2017-09-29T17:08:39Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- testBugFixWhileOldStateNullAndNewStateArray -->
+      </class> <!-- com.github.fge.jsonpatch.diffcustom.TestJsonDiff -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>

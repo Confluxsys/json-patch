@@ -1,14 +1,6 @@
-## Travis builds now enabled
+## Ritesh builds now enabled
 
-Builds are now verified by Travis (see [issue #20](https://github.com/daveclayton/json-patch/issues/20) for details)
-
-https://travis-ci.org/daveclayton/json-patch
-
-## Read me first
-
-This project, as of version 1.4, is licensed under both LGPLv3 and ASL 2.0. See
-file LICENSE for more details. Versions 1.3 and lower are licensed under LGPLv3
-only.
+Builds are now verified by Ritesh
 
 ## What this is
 
@@ -16,36 +8,21 @@ This is an implementation of [RFC 6902 (JSON Patch)](http://tools.ietf.org/html/
 7386 (JSON
 Merge Patch)](http://tools.ietf.org/html/rfc7386) written in Java,
 which uses [Jackson](https://github.com/FasterXML/jackson-databind) (2.2.x) at its core.
+There are a few customization for more accuracy but it still supports all the original standards of the implementations mentioned. 
 
 Its features are:
 
 * {de,}serialization of JSON Patch and JSON Merge Patch instances with Jackson;
 * full support for RFC 6902 operations, including `test`;
-* JSON "diff" (RFC 6902 only) with operation factorization.
+* JSON "diff" (RFC 6902 and custom) with custom operations factorization.
 
 ## Versions
 
-The current version is **1.9**. See file `RELEASE-NOTES.md` for details.
+The current version is **1.0**. See file `RELEASE-NOTES.md` for details.
 
 ## Using it in your project
 
-With Gradle:
-
-```groovy
-dependencies {
-    compile(group: "com.github.fge", name: "json-patch", version: "yourVersionHere");
-}
-```
-
-With Maven:
-
-```xml
-<dependency>
-    <groupId>com.github.fge</groupId>
-    <artifactId>json-patch</artifactId>
-    <version>yourVersionHere</version>
-</dependency>
-```
+In-progress
 
 ## JSON "diff" factorization
 
@@ -69,6 +46,17 @@ the implementation will return the following patch:
 ```json
 [ { "op": "move", "from": "/a", "path": "/c" } ]
 ```
+
+## JSON "diff" customization
+
+The Custom diff only compute difference in form of add, remove and replace. The add, remove and replace operation is same as specified in rfc6901 but only in case of object,there is change in case of array diff operations the remove and replace operations have attached extra {Key: value} of original_value: value which helps us to keep track of the state before the difference was calculated. 
+
+In case of Absense of Key the Algorithm treats whole object as Key and cant be used for calculation of fine-grained difference between the JsonNode
+
+
+This Library Supports Custom Operation in Case of Array
+as ...(In-progress)
+
 
 It is able to do even more than that. See the test files in the project.
 
@@ -124,11 +112,6 @@ final JsonPatch patch = JsonDiff.asJsonPatch(source, target);
 final JsonNode patchNode = JsonDiff.asJson(source, target);
 ```
 
-**Important note**: the API offers **no guarantee at all** about patch "reuse";
-that is, the generated patch is only guaranteed to safely transform the given
-source to the given target. Do not expect it to give the result you expect on
-another source/target pair!
-
 ### JSON Merge Patch
 
 As for `JsonPatch`, you may use either Jackson or "direct" initialization:
@@ -147,3 +130,20 @@ Applying a patch also uses an `.apply()` method:
 final JsonNode patched = patch.apply(orig);
 ```
 
+### JSON diff custom
+
+The main class is `JsonDiff`. It returns the patch as a `JsonPatch` or as a `JsonNode`. Sample usage:
+
+```java
+final JsonPatch patch = JsonDiff.asJsonPatch(source, target, attributeKeyFieldMap);
+final JsonNode patchNode = JsonDiff.asJson(source, target, attributeKeyFieldMap);
+```
+attributeKeyFieldMap is the Map of <JsonPointer,String>, read RFC6902 for JsonPointer.
+JsonPointer contains all the Key Fields Inside an Array object which you want to treat as primary Key.
+
+### Important note
+
+The API offers **no guarantee at all** about patch "reuse";
+that is, the generated patch is only guaranteed to safely transform the given
+source to the given target. Do not expect it to give the result you expect on
+another source/target pair!
