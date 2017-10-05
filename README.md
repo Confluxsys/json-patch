@@ -53,20 +53,18 @@ In case of Absense of Key the Algorithm treats whole object as Key and calculate
 This Library Supports Custom Operation in Case of Array
 as ...
 ```json
-provided the Map<JsonPointer, String> has {"/a" = "b"}
+provided the Map<JsonPointer, String> has {"/a": "b"}
 ```
 
-```json
 Remove Operation
-source     :  { "a": [ { "a": "b" }, { "a": "x", "b": "c"	} ] }
+```json
+source     :  { "a": [ { "a": "b" }, { "a": "x", "b": "c" } ] }
 target     :  { "a": [ { "a": "b" } ] }
 Difference :  [ { "op": "remove", "path": "/a/1", "original_value": { "a": "x", "b": "c" } } ]
 ```
 
-and: 
- 
-```json
 Replace Operation
+```json
 source     : { "a": [ { "a": "b", "b": "a" } ] }
 target     : { "a": [ { "a": "b", "b": "c" } ] }
 Difference : [ { "op": "replace", "path": "/a/0/b", "value": "c", "original_value": { "a": "b", "b": "a" } } ] 
