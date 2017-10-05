@@ -54,8 +54,6 @@ public class TestJsonDiff {
 			String operation = patch.get(i).get(JsonDiffConstants.OPERATION).asText();
 			JsonNode value = patch.get(i).get(JsonDiffConstants.VALUE);
 			String pathString = patch.get(i).get(JsonDiffConstants.PATH).asText();
-			String[] pathArray = pathString.split("/");
-			String lastIterable = pathArray[(pathArray.length - 2)];
 			JsonPointer path = new JsonPointer(pathString);
 			if (operation.equals(JsonDiffConstants.REMOVE)) {
 				if (patch.get(i).has(JsonDiffConstants.ORIGINAL_VALUE)) {
@@ -76,25 +74,6 @@ public class TestJsonDiff {
 							Assert.fail();
 						}
 					}
-
-					//		FIXME ::DONE			
-					//					if (path.parent().get(afterNode).isArray()) {
-					//						for (int index = 0; index < afterNode.size(); index++) {
-					//							logger.debug("Before Node: {}", beforeNode);
-					//							logger.debug("After Node : {}", afterNode);
-					//							logger.debug("Index : {}", index);
-					//							logger.debug("Last Iterable : {}", lastIterable);
-					//							if (afterNode.get(index).has(lastIterable)) {
-					//								logger.warn("ERROR : Value Found at Target ");
-					//								valuePresent = true;
-					//							}
-					//						}
-					//						//Checking Absence of Value at Target
-					//						Assert.assertNotEquals(valuePresent, true);
-					//
-					//						//Checking Presence of Value at Source
-					//						Assert.assertEquals(path.get(beforeNode), patch.get(i).get(JsonDiffConstants.ORIGINAL_VALUE));
-					//					}
 				} else {
 
 					//It is Not an Array Operation -> RFC 6902 remove operation
@@ -116,7 +95,7 @@ public class TestJsonDiff {
 					Assert.assertTrue(path.get(afterNode).equals(value));
 				}
 			} else if (operation.equals(JsonDiffConstants.ADD)) {
-				if (lastIterable.equals("-")) {
+				if (path.toString().contains("-")) {
 					logger.debug("Path is : {}", path.parent());
 					JsonNode stateparentContent = path.parent().get(afterNode);
 					Boolean presence = false;
@@ -131,9 +110,9 @@ public class TestJsonDiff {
 					}
 				} else {
 					stateContent = path.get(afterNode);
-					logger.debug("Path is : {}", path);
-					logger.debug("Value at patch to  ADD is : {}", value);
-					logger.debug("State Content to ADD is   : {}", stateContent);
+					logger.info("Path is : {}", path);
+					logger.info("Value at patch to  ADD is : {}", value);
+					logger.info("State Content to ADD is   : {}", stateContent);
 					Assert.assertEquals(value, stateContent);
 				}
 

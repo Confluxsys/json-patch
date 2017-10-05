@@ -45,9 +45,14 @@ public class JsonDataProvider {
 
 		JsonNode sampleold = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/sampleold.json"));
 		JsonNode samplenew = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/samplenew.json"));
-		return new Object[][] { { beforeNode1, afterNode1 }, { beforeNode2, afterNode2 }, { beforeNode3, afterNode3 },
-				{ beforeNode4, afterNode4 }, { beforeNode5, afterNode5 }, { beforeNode6, afterNode6 },
-				{ sampleold, samplenew } };
+		return new Object[][] { 
+			{ beforeNode1, afterNode1 }, 
+			{ beforeNode2, afterNode2 }, 
+			{ beforeNode3, afterNode3 },
+			{ beforeNode4, afterNode4 }, 
+			{ beforeNode5, afterNode5 }, 
+			{ beforeNode6, afterNode6 },
+			{ sampleold, samplenew } 	};
 	}
 
 	@DataProvider(name = "Array Operation")

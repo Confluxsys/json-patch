@@ -33,18 +33,27 @@ public class TestJsonDiffCustom {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	JsonNode patches;
-
+	private JsonNode patches;
+	private Map<JsonPointer, String> attributesKeyFeilds;
 	@BeforeTest
 	public void initialize() throws JsonPointerException {
-
+		attributesKeyFeilds = new HashMap<JsonPointer, String>();
+				
+		attributesKeyFeilds = new HashMap<JsonPointer, String>();
+		attributesKeyFeilds.put(new JsonPointer("/Profiles"), "Profile");
+		attributesKeyFeilds.put(new JsonPointer("/Groups"), "Group");
+		attributesKeyFeilds.put(new JsonPointer("/Roles"), "Role");
+		attributesKeyFeilds.put(new JsonPointer("/User Licenses"), "License");
+		attributesKeyFeilds.put(new JsonPointer("/IT Resource"), null);
+		attributesKeyFeilds.put(new JsonPointer("/Grouppp"), null); //NULL as Key Should return REMOVE AND ADD instead of REPLACE Element itself as KEY
+		
+		attributesKeyFeilds.put(new JsonPointer("/a"), "a");
+//		attributesKeyFeilds.put(new JsonPointer("/Application Entitlement"), "Entitlement Name");
+//		attributesKeyFeilds.put(new JsonPointer("/Role in VEM"), "Role");
 	}
 
 	@Test(dataProvider = "Array Operation", dataProviderClass = JsonDataProvider.class)
 	public void testArrayOperation(JsonNode oldState, JsonNode newState) throws JsonPointerException {
-
-		Map<JsonPointer, String> attributesKeyFeilds = new HashMap<JsonPointer, String>();
-		attributesKeyFeilds.put(new JsonPointer("/a"), "a");
 
 		try {
 			patches = JsonDiff.asJson(oldState, newState, attributesKeyFeilds);
@@ -116,7 +125,6 @@ public class TestJsonDiffCustom {
 	// Method to validate add operation
 	private void addValidator(JsonNode oldState, JsonNode newState, JsonNode patch) throws JsonPointerException {
 		JsonNode value = patch.get(JsonDiffConstants.VALUE);
-
 		String pathString = patch.get(JsonDiffConstants.PATH).asText();
 		JsonPointer path = new JsonPointer(pathString);
 
@@ -127,6 +135,7 @@ public class TestJsonDiffCustom {
 
 			JsonNode oldStatepathContent = path.parent().get(oldState);// .iterator();
 			List<JsonNode> oldStateAtPath = Lists.newArrayList(oldStatepathContent.iterator());
+			//Value must be absent at oldState
 			assertFalse(oldStateAtPath.contains(value));
 		} else {
 			// Not an Array Add Operation

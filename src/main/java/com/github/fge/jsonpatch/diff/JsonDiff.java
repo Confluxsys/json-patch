@@ -46,9 +46,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -548,47 +547,82 @@ public final class JsonDiff {
 			throws IOException, JsonPointerException {
 
 		final int sourceSize = source.size();
-		final int targetSize = target.size();
 
 		// Few Added, Few Removed Elements
 		if (arrayObjectPrimaryKeyFields.containsKey(pointer)) {
 
-			// Get the Appropriate Key From Map
+			// Get the Appropriate Key From arrayObjectPrimaryKeyFields Map
 			String primaryField = arrayObjectPrimaryKeyFields.get(pointer);
 
 			if (primaryField != null) {
-				// Array Object without Key Field
-				List<String> targetPrimaryFieldValues = new ArrayList<String>(targetSize);
-				List<String> objectToRemoveList = new LinkedList<String>();
-				// get all Primary Key values from target to a List
+
+				Map<String, JsonNode> targetKeyNodeMap = new HashMap<>();
+				Map<String, JsonNode> sourceKeyNodeMap = new HashMap<>();
+
 				for (JsonNode eachAtTarget : target) {
-					JsonNode targetPrimaryFeildValue =eachAtTarget.get(primaryField);
+					JsonNode targetPrimaryFeildValue = eachAtTarget.get(primaryField);
 					if (!targetPrimaryFeildValue.isValueNode()) {
 						/*
-						 * If the code reaches here means that the Given Value of the arrayObjectPrimaryFeild is an container node
+						 * If the code reaches here means that the Given Value
+						 * of the arrayObjectPrimaryFeild is an container node
 						 */
 						throw new IllegalArgumentException("primayKey missing in Array -> Object : {}" + eachAtTarget);
 					} else {
-						targetPrimaryFieldValues.add(targetPrimaryFeildValue.asText());
+						targetKeyNodeMap.put(targetPrimaryFeildValue.asText(), eachAtTarget);
 					}
 				}
 
-				for (int j = 0; j < sourceSize; j++) {
-					/*
-					 * Method that compare the Object's at source and target
-					 * only primary fields
-					 */
-					objectToRemoveList = (generateObjectInArrayDiffs(processor, pointer.append(j), source.get(j),
-							target, targetPrimaryFieldValues, primaryField, objectToRemoveList));
-				}
-				targetPrimaryFieldValues.removeAll(objectToRemoveList);
-				for (JsonNode eachAtTarget : target) {
-					if (targetPrimaryFieldValues.contains(eachAtTarget.get(primaryField).asText())) {
-
-						processor.valueAdded(pointer.append("-"), eachAtTarget);
+				for (JsonNode eachAtSource : source) {
+					JsonNode sourcePrimaryFieldValue = eachAtSource.get(primaryField);
+					if (!sourcePrimaryFieldValue.isValueNode()) {
+						/*
+						 * If the code reaches here means that the Given Value
+						 * of the arrayObjectPrimaryFeild is an container node
+						 */
+						throw new IllegalArgumentException("primayKey missing in Array -> Object : {}" + eachAtSource);
+					} else {
+						sourceKeyNodeMap.put(sourcePrimaryFieldValue.asText(), eachAtSource);
 					}
 				}
-				targetPrimaryFieldValues.clear();
+
+				Set<String> targetPrimaryFieldValues = targetKeyNodeMap.keySet();
+				Set<String> sourcePrimaryFieldValues = sourceKeyNodeMap.keySet();
+
+				/*
+				 * we have all target primary values in targetPrimaryFieldValues
+				 * we have all source primary values in sourcePrimaryFieldValues
+				 */
+
+				// Newly added objects to array
+				for (String addedObject : Sets.difference(targetPrimaryFieldValues, sourcePrimaryFieldValues)) {
+					processor.valueAdded(pointer.append("-"), targetKeyNodeMap.get(addedObject));
+				}
+
+				// old removed objects in array
+				for (String removedObject : Sets.difference(sourcePrimaryFieldValues, targetPrimaryFieldValues)) {
+					JsonNode sourceRemovedObject = sourceKeyNodeMap.get(removedObject);
+					for (int i = 0; i < sourceSize; i++) {
+						if (source.get(i).equals(sourceRemovedObject)) {
+							processor.arrayObjectValueRemoved(pointer.append(i), source.get(i));
+						}
+					}
+				}
+
+				// common Key value with same or different other attributes
+				for (String commonOrReplaceObject : Sets.intersection(sourcePrimaryFieldValues,
+						targetPrimaryFieldValues)) {
+
+					JsonNode sourceObject = sourceKeyNodeMap.get(commonOrReplaceObject);
+					JsonNode targetObject = targetKeyNodeMap.get(commonOrReplaceObject);
+					// neglect common elements
+					if (!sourceObject.equals(targetObject)) {
+						for (int i = 0; i < sourceSize; i++) {
+							if (source.get(i).equals(sourceObject)) {
+								generateCustomDiffs(processor, pointer.append(i), sourceObject, targetObject);
+							}
+						}
+					}
+				}
 			} else {
 				// As Given Key is Null, treat whole Object itself as a Key.
 				generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
@@ -600,55 +634,6 @@ public final class JsonDiff {
 			generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
 		}
 
-	}
-
-	/**
-	 * @param processor
-	 * @param pointer
-	 * @param source
-	 * @param target
-	 * @param targetPrimaryFieldValues
-	 * @param primaryField
-	 * @param objectToRemoveList
-	 * @param arrayObjectPrimaryKeyFields
-	 * @return
-	 * @throws IOException
-	 * @throws JsonPointerException
-	 *             This Method is to find difference in object within an array
-	 *             for which Key field is specified
-	 *
-	 */
-	public static List<String> generateObjectInArrayDiffs(final DiffProcessor processor, JsonPointer pointer,
-			final JsonNode source, final JsonNode target, final List<String> targetPrimaryFieldValues,
-			final String primaryField, final List<String> objectToRemoveList) throws IOException, JsonPointerException {
-
-		int targetSize = target.size();
-		// check weather the key field matches
-		JsonNode sourcePrimaryFieldValue = source.get(primaryField);
-		if (!sourcePrimaryFieldValue.isValueNode()) {
-			/*
-			 * If the code reaches here means that the Given Value of the arrayObjectPrimaryFeild is an container node
-			 */
-			throw new IllegalArgumentException("The Given Object Should have a primary Key to be Detected ");
-		}
-		if (targetPrimaryFieldValues.contains(sourcePrimaryFieldValue.asText())) {
-			// Key Matched
-			objectToRemoveList.add(source.get(primaryField).asText());
-			// check if internal Field Matches
-			for (int i = 0; i < targetSize; i++) {
-				if (target.get(i).get(primaryField).equals(sourcePrimaryFieldValue)) {
-					if (!target.get(i).equals(source)) {
-						// If Content at Source and Target Does not Matches
-						// Sending Data For Replace Operation
-						generateCustomDiffs(processor, pointer, source, target.get(i));
-					}
-				}
-			}
-		} else {
-			// if here means removed from source then perform remove operation
-			processor.arrayObjectValueRemoved(pointer, source);
-		}
-		return objectToRemoveList;
 	}
 
 	/**
@@ -685,42 +670,30 @@ public final class JsonDiff {
 	private static void generateArrayDiffForNullOrNoKey(final DiffProcessor processor, final JsonPointer pointer,
 			final ArrayNode source, final ArrayNode target) {
 		{
-			logger.debug("Key Field Not Available for Pointer at  : {}", pointer);
 			// Treat Whole Thing as an Key itself
 
 			List<JsonNode> targetList = Lists.newArrayList(target.iterator());
-			List<JsonNode> sourceList = new ArrayList<JsonNode>();
-			//
-			// for (JsonNode eachTargetElement : target) {
-			// // add All Target Elements to TargetList
-			// targetList.add(eachTargetElement);
-			// }
-			// logger.info("targetList : {}",targetList);
-			for (JsonNode eachSourceElement : source) {
-				if (!targetList.contains(eachSourceElement)) {
-					// if source contains elements that are not in targetList
-					// add them to sourceList i.e list of Deleted String
-					sourceList.add(eachSourceElement);
-				} else {
-					// if source contains elements that are present in
-					// targetList then remove from targetList i.e. at the end of
-					// for-loop we will get list of added object in targetList
-					targetList.remove(eachSourceElement);
+			List<JsonNode> sourceList = Lists.newArrayList(source.iterator());
+			List<JsonNode> sourceListcopy = sourceList;
+
+			// All removed elements are in sourceList
+			sourceList.removeAll(targetList);
+
+			for (int i = 0; i < source.size(); i++) {
+				// Removing each old element at source
+				if (sourceList.contains(source.get(i))) {
+					processor.arrayObjectValueRemoved(pointer.append(i), source.get(i));
 				}
 			}
-			// logger.info("sourceList : {}", sourceList);
-			// Remove String that is in SourceList
-			for (int k = 0; k < source.size(); k++) {
-				if (sourceList.contains(source.get(k))) {
-					processor.arrayObjectValueRemoved(pointer.append(k), source.get(k));
-				}
+
+			// All newly added Elements are in taargetList
+			targetList.removeAll(sourceListcopy);
+
+			// Adding each new Element at Target
+			for (JsonNode eachAddedInTarget : targetList) {
+				processor.valueAdded(pointer.append("-"), eachAddedInTarget);
 			}
-			// Add Strings that are in target List
-			for (int l = 0; l < target.size(); l++) {
-				if (targetList.contains(source.get(l))) {
-					processor.valueAdded(pointer.append("-"), target.get(l));
-				}
-			}
+
 		}
 	}
 
