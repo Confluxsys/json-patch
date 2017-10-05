@@ -74,12 +74,13 @@ public class JsonDataProvider {
 		JsonNode nullEmptyNEW = objectMapper
 				.readTree(new File("src/test/resources/jsonpatch/diffcustom/nullEmptyNEW.json"));
 
-		return new Object[][] { { arrayObjectRemovalOLD, arrayObjectRemovalNEW }, // Remove
-		//		{ arrayObjectRemovalNEW, arrayObjectRemovalOLD }, // add
-		//		{ arrayObjectReplaceOLD, arrayObjectReplaceNEW }, // replace
-		//		{ arrayObjectReplaceNEW, arrayObjectReplaceOLD }, // replace
-		//		{ arrayObjectAddOLD, arrayObjectAddNEW }, // add
-		//		{ arrayObjectAddNEW, arrayObjectAddOLD }, // remove
+		return new Object[][] {
+				{ arrayObjectRemovalOLD, arrayObjectRemovalNEW }, // Remove
+				{ arrayObjectRemovalNEW, arrayObjectRemovalOLD }, // add
+				{ arrayObjectReplaceOLD, arrayObjectReplaceNEW }, // replace
+				{ arrayObjectReplaceNEW, arrayObjectReplaceOLD }, // replace
+				{ arrayObjectAddOLD, arrayObjectAddNEW }, // add
+				{ arrayObjectAddNEW, arrayObjectAddOLD }, // remove
 				{ nullEmptyOLD, nullEmptyNEW }, // null old
 				{ nullEmptyNEW, nullEmptyOLD } // null new
 		};

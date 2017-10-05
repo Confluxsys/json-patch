@@ -2,16 +2,16 @@
 <testng-results skipped="0" failed="0" total="7" passed="7">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="318" started-at="2017-10-04T13:40:45Z" finished-at="2017-10-04T13:40:45Z">
+  <suite name="Default suite" duration-ms="327" started-at="2017-10-05T07:30:28Z" finished-at="2017-10-05T07:30:29Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="318" started-at="2017-10-04T13:40:45Z" finished-at="2017-10-04T13:40:45Z">
+    <test name="Default test" duration-ms="327" started-at="2017-10-05T07:30:28Z" finished-at="2017-10-05T07:30:29Z">
       <class name="com.github.fge.jsonpatch.diffcustom.TestJsonDiff">
-        <test-method status="PASS" signature="initialize()[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="initialize" is-config="true" duration-ms="60" started-at="2017-10-04T19:10:45Z" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="initialize()[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="initialize" is-config="true" duration-ms="39" started-at="2017-10-05T13:00:28Z" finished-at="2017-10-05T13:00:28Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initialize -->
-        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="59" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="54" started-at="2017-10-05T13:00:28Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-05T13:00:28Z">
           <params>
             <param index="0">
               <value>
@@ -27,7 +27,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Computing -->
-        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="11" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="13" started-at="2017-10-05T13:00:28Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-05T13:00:28Z">
           <params>
             <param index="0">
               <value>
@@ -43,7 +43,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Computing -->
-        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="5" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="4" started-at="2017-10-05T13:00:28Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-05T13:00:28Z">
           <params>
             <param index="0">
               <value>
@@ -59,7 +59,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Computing -->
-        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="3" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="2" started-at="2017-10-05T13:00:28Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-05T13:00:28Z">
           <params>
             <param index="0">
               <value>
@@ -75,7 +75,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Computing -->
-        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="4" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="3" started-at="2017-10-05T13:00:28Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-05T13:00:29Z">
           <params>
             <param index="0">
               <value>
@@ -91,7 +91,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Computing -->
-        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="3" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="3" started-at="2017-10-05T13:00:29Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-05T13:00:29Z">
           <params>
             <param index="0">
               <value>
@@ -107,7 +107,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- Computing -->
-        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="2" started-at="2017-10-04T19:10:45Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-04T19:10:45Z">
+        <test-method status="PASS" signature="Computing(com.fasterxml.jackson.databind.JsonNode, com.fasterxml.jackson.databind.JsonNode)[pri:0, instance:com.github.fge.jsonpatch.diffcustom.TestJsonDiff@4f933fd1]" name="Computing" duration-ms="2" started-at="2017-10-05T13:00:29Z" data-provider="Provide Data To Json-Diff" finished-at="2017-10-05T13:00:29Z">
           <params>
             <param index="0">
               <value>
