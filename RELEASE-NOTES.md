@@ -1,3 +1,7 @@
+##2.0
+
+* A new JSON diff implementation; keeping all old stuff as is, this algorithm is more efficient and robust for only providing add, remove and replaced node's from the JSON.  
+
 ## 1.9
 
 * Completely new JSON diff implementation; less smart than the previous one but
