@@ -41,11 +41,8 @@ import com.google.common.collect.Sets;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -87,7 +84,6 @@ public final class JsonDiff {
 	private static final ObjectMapper MAPPER = JacksonUtils.newMapper();
 
 	private static final Equivalence<JsonNode> EQUIVALENCE = JsonNumEquals.getInstance();
-	private static Logger logger = LoggerFactory.getLogger(JsonDiff.class);
 
 	private JsonDiff() {
 	}
