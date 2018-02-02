@@ -1,0 +1,50 @@
+[
+  {
+    "op": "remove",
+    "path": "/Roles/0",
+    "original_value": {
+      "Role": "Manager"
+    }
+  },
+  {
+    "op": "remove",
+    "path": "/Roles/1",
+    "original_value": {
+      "Role": "Dev"
+    }
+  },
+  {
+    "op": "remove",
+    "path": "/First Name/0",
+    "original_value": "aa"
+  },
+  {
+    "op": "remove",
+    "path": "/First Name/1",
+    "original_value": "bb"
+  },
+  {
+    "op": "add",
+    "path": "/First Name/-",
+    "value": "ba"
+  },
+  {
+    "op": "add",
+    "path": "/First Name/-",
+    "value": "bc"
+  },
+  {
+    "op": "remove",
+    "path": "/User Licenses/0",
+    "original_value": {
+      "License": "Manager"
+    }
+  },
+  {
+    "op": "remove",
+    "path": "/User Licenses/1",
+    "original_value": {
+      "License": "junior"
+    }
+  }
+]

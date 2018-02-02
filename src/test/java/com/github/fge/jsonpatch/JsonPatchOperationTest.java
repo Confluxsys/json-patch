@@ -38,88 +38,65 @@ import java.util.List;
 import static org.testng.Assert.*;
 
 @Test
-public abstract class JsonPatchOperationTest
-{
-    private static final MessageBundle BUNDLE
-        = MessageBundles.getBundle(JsonPatchMessages.class);
+public abstract class JsonPatchOperationTest {
+	private static final MessageBundle BUNDLE = MessageBundles.getBundle(JsonPatchMessages.class);
 
-    private static final Equivalence<JsonNode> EQUIVALENCE
-        = JsonNumEquals.getInstance();
+	private static final Equivalence<JsonNode> EQUIVALENCE = JsonNumEquals.getInstance();
 
-    private final JsonNode errors;
-    private final JsonNode ops;
-    private final ObjectReader reader;
+	private final JsonNode errors;
+	private final JsonNode ops;
+	private final ObjectReader reader;
 
-    protected JsonPatchOperationTest(final String prefix)
-        throws IOException
-    {
-        final String resource = "/jsonpatch/" + prefix + ".json";
-        final JsonNode node = JsonLoader.fromResource(resource);
-        errors = node.get("errors");
-        ops = node.get("ops");
-        reader = JacksonUtils.getReader().withType(JsonPatchOperation.class);
-    }
+	protected JsonPatchOperationTest(final String prefix) throws IOException {
+		final String resource = "/jsonpatch/" + prefix + ".json";
+		final JsonNode node = JsonLoader.fromResource(resource);
+		errors = node.get("errors");
+		ops = node.get("ops");
+		reader = JacksonUtils.getReader().withType(JsonPatchOperation.class);
+	}
 
-    @DataProvider
-    public final Iterator<Object[]> getErrors()
-        throws NoSuchFieldException, IllegalAccessException
-    {
-        final List<Object[]> list = Lists.newArrayList();
+	@DataProvider
+	public final Iterator<Object[]> getErrors() throws NoSuchFieldException, IllegalAccessException {
+		final List<Object[]> list = Lists.newArrayList();
 
-        for (final JsonNode node: errors)
-            list.add(new Object[]{
-                node.get("op"),
-                node.get("node"),
-                BUNDLE.getMessage(node.get("message").textValue())
-            });
+		for (final JsonNode node : errors)
+			list.add(new Object[] { node.get("op"), node.get("node"),
+					BUNDLE.getMessage(node.get("message").textValue()) });
 
-        return list.iterator();
-    }
+		return list.iterator();
+	}
 
-    @Test(dataProvider = "getErrors")
-    public final void errorsAreCorrectlyReported(final JsonNode patch,
-        final JsonNode node, final String message)
-        throws IOException
-    {
-        final JsonPatchOperation op = reader.readValue(patch);
+	@Test(dataProvider = "getErrors")
+	public final void errorsAreCorrectlyReported(final JsonNode patch, final JsonNode node, final String message)
+			throws IOException {
+		final JsonPatchOperation op = reader.readValue(patch);
 
-        try {
-            op.apply(node);
-            fail("No exception thrown!!");
-        } catch (JsonPatchException e) {
-            assertEquals(e.getMessage(), message);
-        }
-    }
+		try {
+			op.apply(node);
+			fail("No exception thrown!!");
+		} catch (JsonPatchException e) {
+			assertEquals(e.getMessage(), message);
+		}
+	}
 
-    @DataProvider
-    public final Iterator<Object[]> getOps()
-    {
-        final List<Object[]> list = Lists.newArrayList();
+	@DataProvider
+	public final Iterator<Object[]> getOps() {
+		final List<Object[]> list = Lists.newArrayList();
 
-        for (final JsonNode node: ops)
-            list.add(new Object[]{
-                node.get("op"),
-                node.get("node"),
-                node.get("expected")
-            });
+		for (final JsonNode node : ops)
+			list.add(new Object[] { node.get("op"), node.get("node"), node.get("expected") });
 
-        return list.iterator();
-    }
+		return list.iterator();
+	}
 
-    @Test(dataProvider = "getOps")
-    public final void operationsYieldExpectedResults(final JsonNode patch,
-        final JsonNode node, final JsonNode expected)
-        throws IOException, JsonPatchException
-    {
-        final JsonPatchOperation op = reader.readValue(patch);
-        final JsonNode actual = op.apply(node);
-
-        assertTrue(EQUIVALENCE.equivalent(actual, expected),
-            "patched node differs from expectations: expected " + expected
-            + " but found " + actual);
-        if (EQUIVALENCE.equivalent(node, actual) && node.isContainerNode())
-            assertNotSame(node, actual,
-                "operation didn't make a copy of the input node");
-    }
+	@Test(dataProvider = "getOps")
+	public final void operationsYieldExpectedResults(final JsonNode patch, final JsonNode node, final JsonNode expected)
+			throws IOException, JsonPatchException {
+		final JsonPatchOperation op = reader.readValue(patch);
+		final JsonNode actual = op.apply(node);
+		assertTrue(EQUIVALENCE.equivalent(actual, expected),
+				"patched node differs from expectations: expected " + expected + " but found " + actual);
+		if (EQUIVALENCE.equivalent(node, actual) && node.isContainerNode())
+			assertNotSame(node, actual, "operation didn't make a copy of the input node");
+	}
 }
-

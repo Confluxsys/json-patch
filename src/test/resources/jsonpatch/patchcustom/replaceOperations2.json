@@ -1,0 +1,12 @@
+[
+	{
+		"op": "replace",
+		"path": "/Roles/?",
+		"value": {
+			"ROLE": "VISA Manager"
+		},
+		"value_locator": {
+			"ROLE": "CAG Developer"
+		}
+	}
+]

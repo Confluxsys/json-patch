@@ -19,7 +19,19 @@
 
 package com.github.fge.jsonpatch.diff;
 
-import com.github.fge.jsonpatch.diff.DiffProcessor;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -29,6 +41,7 @@ import com.github.fge.jackson.JsonNumEquals;
 import com.github.fge.jackson.NodeType;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jackson.jsonpointer.JsonPointerException;
+import com.github.fge.jsonpatch.JsonDiffException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchMessages;
 import com.github.fge.msgsimple.bundle.MessageBundle;
@@ -38,16 +51,6 @@ import com.google.common.base.Equivalence;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * JSON "diff" implementation
@@ -84,6 +87,7 @@ public final class JsonDiff {
 	private static final ObjectMapper MAPPER = JacksonUtils.newMapper();
 
 	private static final Equivalence<JsonNode> EQUIVALENCE = JsonNumEquals.getInstance();
+	private static Logger logger = LoggerFactory.getLogger(JsonDiff.class);
 
 	private JsonDiff() {
 	}
@@ -147,10 +151,10 @@ public final class JsonDiff {
 		}
 
 		/*
-		 * If we reach this point, it means that both nodes are the same type,
+		 * in case we reach this point, it means that both nodes are the same type,
 		 * but are not equivalent.
 		 *
-		 * If this is not a container, generate a replace operation.
+		 * in case this is not a container, generate a replace operation.
 		 */
 		if (!source.isContainerNode()) {
 			processor.valueReplaced(pointer, source, target);
@@ -158,7 +162,7 @@ public final class JsonDiff {
 		}
 
 		/*
-		 * If we reach this point, both nodes are either objects or arrays;
+		 * in case we reach this point, both nodes are either objects or arrays;
 		 * delegate.
 		 */
 		if (firstType == NodeType.OBJECT)
@@ -231,6 +235,7 @@ public final class JsonDiff {
 			break;
 		case ARRAY:
 			computeArray(ret, pointer, first, second);
+			break;
 		default:
 			/* nothing */
 		}
@@ -260,126 +265,97 @@ public final class JsonDiff {
 
 	// Custom changes to existing Methods
 	/**
-	 * Generate a JSON patch for transforming the source node into the target
-	 * node
+	 * 
+	 * This is a custom Diff generation Function which needs a Map of
+	 * JsonPointer and String, which contains All those primary Keys for the
+	 * Values in Array that you want to find difference for.
 	 * 
 	 * @param source
-	 *            the node to be patched
+	 *            old json
 	 * @param target
-	 *            the expected result after applying the patch
-	 * @param arrayObjectPrimaryKeyFields
-	 *            the map of Key Fields with its path to detect operations in an
-	 *            Array Object
-	 * @return JsonNode
-	 * @throws JsonPointerException
+	 *            new json
+	 * @param attributesKeyFields
+	 *            can be null but needed for denoting custom operations.
+	 * @return JsonNode output in JsonNode format
+	 * @throws JsonDiffException 
 	 * 
-	 *             This is a custom Diff generation Function which needs a
-	 *             MAp<JsonPointer, String> which contains All those primary
-	 *             Keys for the Values in Array that you want to find difference
-	 *             for.
 	 */
 	public static JsonNode asJson(final JsonNode source, final JsonNode target,
-			final Map<JsonPointer, String> arrayObjectPrimaryKeyFields) throws JsonPointerException {
-		final String difference;
+			Map<JsonPointer, String> attributesKeyFields) throws JsonDiffException {
+		final String s;
 
 		try {
-			// we pass the source, target and arrayObjectPrimaryKeyFieldsto
-			// JsonPatch to
-			// find difference
-			difference = MAPPER.writeValueAsString(asJsonPatch(source, target, arrayObjectPrimaryKeyFields));
-			// We get the final difference between the source and target as a
-			// string
-
-			return MAPPER.readTree(difference);
-			// returning the difference as a JsonNode
+			s = MAPPER.writeValueAsString(asJsonPatch(source, target, attributesKeyFields));
+			return MAPPER.readTree(s);
 		} catch (IOException e) {
-			throw new RuntimeException("cannot generate JSON diff", e);
+			throw new JsonDiffException(BUNDLE.getMessage("jsonDiff.generic"), e);
 		}
 	}
 
 	/**
-	 * Generate a JSON patch for transforming the source node into the target
-	 * node
+	 * 
+	 * This Method Generates difference in form of JsonPatch that help's us to
+	 * further use this to be directly implementable on a JsonNode using Json
+	 * Merge Patch
 	 * 
 	 * @param source
-	 *            the node to be patched
+	 *            old json
 	 * @param target
-	 *            the expected result after applying the patch
-	 * @param arrayObjectPrimaryKeyFields
-	 *            the map of Key Fields with its path to detect operations in an
-	 *            Array Object
-	 * @return JsonPatch
+	 *            new json
+	 * @param attributesKeyFields
+	 *            can be null but needed for denoting custom operations.
+	 * @return JsonPatch output in JsonPatch format
 	 * @throws IOException
 	 * @throws JsonPointerException
+	 * @throws JsonDiffException 
 	 * 
-	 *             This Method Generates difference in form of JsonPatch that
-	 *             help's us to further use this to be directly implementable on
-	 *             a JsonNode using Json Merge Patch
+	 * 
 	 */
 	public static JsonPatch asJsonPatch(final JsonNode source, final JsonNode target,
-			final Map<JsonPointer, String> arrayObjectPrimaryKeyFields) throws IOException, JsonPointerException {
+			Map<JsonPointer, String> attributesKeyFields) throws JsonDiffException {
 		BUNDLE.checkNotNull(source, "common.nullArgument");
 		BUNDLE.checkNotNull(target, "common.nullArgument");
 
-		/*
-		 * To initialize DiffProcessor --old Implementation we need a Map of
-		 * unchanged values which are helpful in evaluating copy and move
-		 * operations in add and remove operation. We don't support such
-		 * operation. THe Copy and Move are Neglected while calculating
-		 * difference
-		 * 
-		 */
-		final Map<JsonPointer, JsonNode> unchanged = Maps.newHashMap();
-		/*
-		 * Initializing DiffProcessor to store the Difference operations.
-		 */
+		final Map<JsonPointer, JsonNode> unchanged = getUnchangedValues(source, target);
 		final DiffProcessor processor = new DiffProcessor(unchanged);
 
-		/*
-		 * The method to calculate difference
-		 */
-		generateDiffs(processor, JsonPointer.empty(), source, target, arrayObjectPrimaryKeyFields);
+		generateDiffs(processor, JsonPointer.empty(), source, target, attributesKeyFields);
 		return processor.getPatch();
 	}
 
 	/**
-	 * This Method decides what kind of Object or a value in an JsonNode is and
+	 * 
+	 * This Method decides what kind off Object or a value in an JsonNode is and
 	 * then Selects appropriate action to be perform.
 	 * 
 	 * @param processor
-	 * 
 	 * @param pointer
-	 * 
 	 * @param source
-	 *            The node to be patched
+	 *            old json
 	 * @param target
-	 *            The expected result after applying the patch
-	 * @param arrayObjectPrimaryKeyFields
-	 *            The map of Key Fields with its path to detect operations in an
-	 *            Array Object
+	 *            new json
+	 * @param attributesKeyFields
+	 *            can be null but needed for denoting custom operations.
 	 * @throws IOException
 	 * @throws JsonPointerException
+	 * @throws JsonDiffException 
 	 * 
-	 *             {@value} : JsonNode treat's null as a node so no null pointer
-	 *             exception can be checked or occur
 	 */
 	private static void generateDiffs(final DiffProcessor processor, final JsonPointer pointer, final JsonNode source,
-			final JsonNode target, Map<JsonPointer, String> arrayObjectPrimaryKeyFields)
-			throws IOException, JsonPointerException {
+			final JsonNode target, Map<JsonPointer, String> attributesKeyFields)
+			throws JsonDiffException {
 
 		if (EQUIVALENCE.equivalent(source, target))
 			return;
 		final NodeType firstType = NodeType.getNodeType(source);
 		final NodeType secondType = NodeType.getNodeType(target);
-
 		/*
-		 * Handles cases of 1. All Add. 2. All remove. 3. Add [], {}, null. 4.
-		 * Remove [], {}, null. in case of Array, Object, ValueNode besides
-		 * null.
+		 * Node types differ: generate a replacement operation.
 		 */
+
+		// Handles Replace null with [] and {} or null with null type cases,
+		// when size is 0, we neglect this case
 		if (source.size() == 0 && target.size() == 0) {
-			// sizes are zero for String , Integer, boolean , Empty Object,
-			// Empty Array, null {@value}
 			if (firstType != secondType) {
 				return;
 			}
@@ -387,46 +363,41 @@ public final class JsonDiff {
 
 		// All add Elements
 		else if (source.size() == 0 && target.size() != 0) {
-			if (target.isArray()) {
+			if (secondType == NodeType.ARRAY) {
 				for (JsonNode eachElementAtTarget : target) {
 					// Adding all Target Array Object one at a time
 					processor.valueAdded(pointer.append("-"), eachElementAtTarget);
 				}
 				return;
 			} else {
-				// if not array we can add it directly
 				processor.valueAdded(pointer, target);
 				return;
 			}
 		}
 		// All Remove Elements
 		else if (source.size() != 0 && target.size() == 0) {
-			if (source.isArray()) {
-				for (int sourceIndex = 0; sourceIndex < source.size(); sourceIndex++) {
+			if (firstType == NodeType.ARRAY) {
+				for (int k = 0; k < source.size(); k++) {
 					// Removing Each source Array Objects one at a time
-					processor.arrayObjectValueRemoved(pointer.append(sourceIndex), source.get(sourceIndex));
+					processor.arrayObjectValueRemoved(pointer.append(k), source.get(k));
 				}
-				// As the whole Node is processed we return
-				return;
-			} else {
-				processor.valueRemoved(pointer, source);
+				// As the whole Node is processed we returned
 				return;
 			}
 		}
-		/*
-		 * If we reach here, it means that neither of both are empty and both
-		 * are not equivalent.
-		 */
 
 		/*
-		 * Now if, Node types differ: generate a replacement operation. FIXME
+		 * In case we reach here, it means that neither of both are empty and both
+		 * are not equivalent.
 		 */
+		// This part is Mandatory
+		// If type is different but size != 0 means replace complete object
 		if (firstType != secondType) {
 			processor.valueReplaced(pointer, source, target);
 			return;
 		}
 		/*
-		 * If we reach this point, it means that both nodes are the same type,
+		 * In case we reach this point, it means that both nodes are the same type,
 		 * but are not equivalent.
 		 *
 		 * If this is not a container, generate a replace operation.
@@ -440,34 +411,36 @@ public final class JsonDiff {
 		 * delegate.
 		 */
 		if (firstType == NodeType.OBJECT) {
-			// Calculate difference For Objects .
-			generateObjectDiffs(processor, pointer, (ObjectNode) source, (ObjectNode) target,
-					arrayObjectPrimaryKeyFields);
+
+			generateObjectDiffs(processor, pointer, (ObjectNode) source, (ObjectNode) target, attributesKeyFields);
 
 		} else {
-			// Calculate difference For Array's.
-			generateArrayDiffs(processor, pointer, (ArrayNode) source, (ArrayNode) target, arrayObjectPrimaryKeyFields);
+			generateArrayDiffs(processor, pointer, (ArrayNode) source, (ArrayNode) target, attributesKeyFields);
 
 		}
 
 	}
 
 	/**
-	 * This method is used to evaluate difference between objects in JsonNode
+	 * This method is used to evaluate difference between two objects
 	 * 
 	 * @param processor
 	 * @param pointer
 	 * @param source
+	 *            old json
 	 * @param target
-	 * @param arrayObjectPrimaryKeyFields
+	 *            new json
+	 * @param attributesKeyFields
+	 *            can be null but needed for denoting custom operations.
 	 * @throws IOException
 	 * @throws JsonPointerException
+	 * @throws JsonDiffException 
 	 * 
 	 * 
 	 */
 	private static void generateObjectDiffs(final DiffProcessor processor, final JsonPointer pointer,
-			final ObjectNode source, final ObjectNode target, Map<JsonPointer, String> arrayObjectPrimaryKeyFields)
-			throws IOException, JsonPointerException {
+			final ObjectNode source, final ObjectNode target, Map<JsonPointer, String> attributeKeyFields)
+			throws JsonDiffException {
 		final Set<String> firstFields = Sets.newTreeSet(Sets.newHashSet(source.fieldNames()));
 		final Set<String> secondFields = Sets.newTreeSet(Sets.newHashSet(target.fieldNames()));
 		// this for loop is for calculating removed elements
@@ -477,40 +450,52 @@ public final class JsonDiff {
 		 */
 		for (final String field : Sets.difference(firstFields, secondFields)) {
 			// Element To Remove
-			JsonNode sourceField = source.get(field);
-
-			if ((sourceField.size() != 0)) {
+			JsonNode fieldValue = source.get(field);
+			if ((fieldValue.size() != 0)) {
 				// Source removal Array
-				for (int index = 0; index < sourceField.size(); index++) {
-					// each single array Element Removal
-					processor.valueRemoved(pointer.append(field).append(index), sourceField.get(index));
-				}
-			} else {
-				/*
-				 * IF Empty node Removal i.e value String, int, etc removal
-				 * which has size as zero, so this handles Removal of null or []
-				 * or {} cases.
-				 */
-				if (sourceField.isValueNode() && (!sourceField.isNull())) {
-					processor.valueRemoved(pointer.append(field), sourceField);
+				if (fieldValue.isArray()) {
+					for (int index = 0; index < fieldValue.size(); index++) {
+						// each single array Element Removal
+						processor.arrayObjectValueRemoved(pointer.append(field).append(index), fieldValue.get(index));
+					}
+				} else {
+					for (JsonNode eachField : fieldValue) {
+						processor.valueRemoved(pointer.append(field), eachField);
+					}
 				}
 
+			} else {
+				// IF Empty Object Removal i.e value String, int, etc removal
+				// which has size as zero
+				if (!fieldValue.isContainerNode()) {
+					processor.valueRemoved(pointer.append(field), fieldValue);
+				}
 			}
 		}
 		/*
 		 * This loop evaluates the Fields at target that are not in source Node
 		 */
 		for (final String field : Sets.difference(secondFields, firstFields)) {
-			/*
-			 * IF Empty node Added i.e value String, int, etc removal which has
-			 * size as zero, so this handles Removal of null or [] or {} cases.
-			 * node.size() == 0 means [] or {} node.isvalueNode() means String,
-			 * int, Boolean , null etc but we don't support null so we neglect
-			 * null
-			 */
-			if ((target.get(field).size() != 0) || target.get(field).isValueNode()) {
-				if (!target.get(field).isNull()) {
-					processor.valueAdded(pointer.append(field), target.get(field));
+			// ADD Element
+			JsonNode fieldValue = target.get(field);
+			if ((fieldValue.size() != 0)) {
+				if (fieldValue.isArray()) {
+					// target removal Array
+					for (int index = 0; index < fieldValue.size(); index++) {
+						// each single array Element Removal
+						processor.valueAdded(pointer.append(field).append(index), fieldValue.get(index));
+					}
+				} else {
+					for (JsonNode eachField : fieldValue) {
+						processor.valueAdded(pointer.append(field), eachField);
+					}
+				}
+
+			} else {
+				// IF Empty Object Addition i.e value String, int, etc removal
+				// which has size as zero
+				if (!fieldValue.isContainerNode()) {
+					processor.valueAdded(pointer.append(field), fieldValue);
 				}
 			}
 		}
@@ -518,11 +503,8 @@ public final class JsonDiff {
 		 * This loop evaluates the common elements in both nodes
 		 */
 		for (final String field : Sets.intersection(firstFields, secondFields)) {
-			// REPLACE //Neglecting COMMON Elements by Equivalence
-			if (!(EQUIVALENCE.equivalent(source.get(field), target.get(field)))) {
-				generateDiffs(processor, pointer.append(field), source.get(field), target.get(field),
-						arrayObjectPrimaryKeyFields);
-			}
+			// REPLACE OR COMMON Elements
+			generateDiffs(processor, pointer.append(field), source.get(field), target.get(field), attributeKeyFields);
 		}
 	}
 
@@ -532,113 +514,202 @@ public final class JsonDiff {
 	 * @param processor
 	 * @param pointer
 	 * @param source
+	 *            old json
 	 * @param target
-	 * @param arrayObjectPrimaryKeyFields
-	 * @throws IOException
-	 * @throws JsonPointerException
+	 *            new json
+	 * @param attributesKeyFields
+	 *            can be null but needed for denoting custom operations.
+	 * @throws JsonDiffException 
 	 * 
 	 */
 	private static void generateArrayDiffs(final DiffProcessor processor, final JsonPointer pointer,
-			final ArrayNode source, final ArrayNode target, final Map<JsonPointer, String> arrayObjectPrimaryKeyFields)
-			throws IOException, JsonPointerException {
+			final ArrayNode source, final ArrayNode target, final Map<JsonPointer, String> attributesKeyFields)
+			throws JsonDiffException {
 
 		final int sourceSize = source.size();
+		final int targetSize = target.size();
 
-		// Few Added, Few Removed Elements
-		if (arrayObjectPrimaryKeyFields.containsKey(pointer)) {
+		if (sourceSize == 0 && targetSize != 0) {
+			// IF every element is ADD Element
+			for (int i = 0; i < targetSize; i++) {
+				processor.valueAdded(pointer.append("-"), target.get(i));
+			}
+		} else if (sourceSize != 0 && targetSize == 0) {
+			// IF Every Element is Remove Element
+			for (int k = 0; k < sourceSize; k++) {
+				processor.arrayObjectValueRemoved(pointer.append(k), source.get(k));
+			}
+		} else {
+			// Few Added, Few Removed Elements
+			// Null check to Avoid null pointer exception to Map
+			if (attributesKeyFields == null) {
+				generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
+			} else if (attributesKeyFields.containsKey(pointer)) {
 
-			// Get the Appropriate Key From arrayObjectPrimaryKeyFields Map
-			String primaryField = arrayObjectPrimaryKeyFields.get(pointer);
+				// Get the Appropriate Key From Map
+				String keyFieldValue = attributesKeyFields.get(pointer);
 
-			if (primaryField != null) {
-
-				Map<String, JsonNode> targetKeyNodeMap = new HashMap<>();
-				Map<String, JsonNode> sourceKeyNodeMap = new HashMap<>();
-
-				for (JsonNode eachAtTarget : target) {
-					JsonNode targetPrimaryFeildValue = eachAtTarget.get(primaryField);
-					if (!targetPrimaryFeildValue.isValueNode()) {
-						/*
-						 * If the code reaches here means that the Given Value
-						 * of the arrayObjectPrimaryFeild is an container node
-						 */
-						throw new IllegalArgumentException("primayKey missing in Array -> Object : {}" + eachAtTarget);
-					} else {
-						targetKeyNodeMap.put(targetPrimaryFeildValue.asText(), eachAtTarget);
-					}
-				}
-
-				for (JsonNode eachAtSource : source) {
-					JsonNode sourcePrimaryFieldValue = eachAtSource.get(primaryField);
-					if (!sourcePrimaryFieldValue.isValueNode()) {
-						/*
-						 * If the code reaches here means that the Given Value
-						 * of the arrayObjectPrimaryFeild is an container node
-						 */
-						throw new IllegalArgumentException("primayKey missing in Array -> Object : {}" + eachAtSource);
-					} else {
-						sourceKeyNodeMap.put(sourcePrimaryFieldValue.asText(), eachAtSource);
-					}
-				}
-
-				Set<String> targetPrimaryFieldValues = targetKeyNodeMap.keySet();
-				Set<String> sourcePrimaryFieldValues = sourceKeyNodeMap.keySet();
-
-				/*
-				 * we have all target primary values in targetPrimaryFieldValues
-				 * we have all source primary values in sourcePrimaryFieldValues
-				 */
-
-				// Newly added objects to array
-				for (String addedObject : Sets.difference(targetPrimaryFieldValues, sourcePrimaryFieldValues)) {
-					processor.valueAdded(pointer.append("-"), targetKeyNodeMap.get(addedObject));
-				}
-
-				// old removed objects in array
-				for (String removedObject : Sets.difference(sourcePrimaryFieldValues, targetPrimaryFieldValues)) {
-					JsonNode sourceRemovedObject = sourceKeyNodeMap.get(removedObject);
-					for (int i = 0; i < sourceSize; i++) {
-						if (source.get(i).equals(sourceRemovedObject)) {
-							processor.arrayObjectValueRemoved(pointer.append(i), source.get(i));
+				if (keyFieldValue == null) {
+					// This method is used to calculate Array Diff in case Key
+					// is Not present
+					generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
+				} else {
+					// Array Object without Key Field
+					List<String> targetObjectList = new ArrayList<String>(targetSize);
+					List<String> objectToRemoveList = new LinkedList<String>();
+					// get all Primary Key values from target to a List
+					for (int j = 0; j < targetSize; j++) {
+						JsonNode targetObject = target.get(j);
+						if (targetObject != null && targetObject.has(keyFieldValue)
+								&& targetObject.get(keyFieldValue).isTextual()) {
+							targetObjectList.add(targetObject.get(keyFieldValue).asText());
+						} else {
+							throw new JsonDiffException(BUNDLE.getMessage("jsonDiff.PrimaryKeyMissing"));
 						}
 					}
+
+					for (int j = 0; j < sourceSize; j++) {
+						// Comparing Each source Object with Target Objects
+						// //only Key Comparison
+						generateObjectInArrayDiffs(processor, pointer.append(j), source.get(j), target,
+								targetObjectList, keyFieldValue, objectToRemoveList, attributesKeyFields);
+					}
+					targetObjectList.removeAll(objectToRemoveList);
+					for (int i = 0; i < targetSize; i++) {
+						if (targetObjectList.contains(target.get(i).get(keyFieldValue).asText())) {
+							// After Evaluating all Now we do the remaining
+							// addition
+							processor.valueAdded(pointer.append("-"), target.get(i));
+						}
+					}
+					targetObjectList.clear();
 				}
+			} else {
+				// This Function is used to calculate Array Diff in case Key is
+				// Not present
+				generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
+			}
 
-				// common Key value with same or different other attributes
-				for (String commonOrReplaceObject : Sets.intersection(sourcePrimaryFieldValues,
-						targetPrimaryFieldValues)) {
+		}
+	}
 
-					JsonNode sourceObject = sourceKeyNodeMap.get(commonOrReplaceObject);
-					JsonNode targetObject = targetKeyNodeMap.get(commonOrReplaceObject);
-					// neglect common elements
-					if (!sourceObject.equals(targetObject)) {
-						for (int i = 0; i < sourceSize; i++) {
-							if (source.get(i).equals(sourceObject)) {
-								generateCustomDiffs(processor, pointer.append(i), sourceObject, targetObject);
-							}
+	/**
+	 * 
+	 * This method is invoked to find diff in an array element for which key is
+	 * null or not specified in the Map<JsonPointer, String> provided by user.
+	 * 
+	 * @param processor
+	 * @param pointer
+	 * @param source
+	 *            old json
+	 * @param target
+	 *            new json
+	 * 
+	 */
+	private static void generateArrayDiffForNullOrNoKey(final DiffProcessor processor, final JsonPointer pointer,
+			final ArrayNode source, final ArrayNode target) {
+		{
+			logger.debug("Key Field Not Available for Pointer at  : {}", pointer);
+			// Treat Whole Thing as an Key itself
+
+			List<JsonNode> toAddList = Lists.newArrayList(target.iterator());
+			List<JsonNode> toRemoveList = new ArrayList<JsonNode>();
+			//
+			// for (JsonNode eachTargetElement : target) {
+			// // add All Target Elements to TargetList
+			// targetList.add(eachTargetElement);
+			// }
+			for (JsonNode eachSourceElement : source) {
+				if (toAddList.contains(eachSourceElement)) {
+					// if source contains elements that are present in
+					// targetList then remove from targetList i.e. at the end of
+					// for-loop we will get list of added object in targetList
+					toAddList.remove(eachSourceElement);
+
+				} else {
+					// if source contains elements that are not in targetList
+					// add them to sourceList i.e list of Deleted String
+					toRemoveList.add(eachSourceElement);
+				}
+			}
+			// Remove String that is in SourceList
+			for (int k = 0; k < source.size(); k++) {
+				if (toRemoveList.contains(source.get(k))) {
+					processor.arrayObjectValueRemoved(pointer.append(k), source.get(k));
+				}
+			}
+			// Add Strings that are in target List
+			for (JsonNode eachAdd : toAddList) {
+				processor.valueAdded(pointer.append("-"), eachAdd);
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * This Method is to find difference in object within an array for which Key
+	 * field is specified
+	 * 
+	 * @param processor
+	 * @param pointer
+	 * @param source
+	 *            old json
+	 * @param target
+	 *            new json
+	 * @param targetObjectList
+	 * @param keyFieldValue
+	 * @param objectToRemoveList
+	 * @param attributesKeyFields
+	 *            can be null but needed for denoting custom operations.
+	 * 
+	 * @return
+	 * 
+	 * @throws JsonDiffException 
+	 * 
+	 *
+	 */
+	public static void generateObjectInArrayDiffs(final DiffProcessor processor, JsonPointer pointer,
+			final JsonNode source, final JsonNode target, final List<String> targetObjectList,
+			final String keyFieldValue, final List<String> objectToRemoveList,
+			final Map<JsonPointer, String> attributesKeyFields) throws JsonDiffException {
+		int targetSize = target.size();
+		// check weather the key field matches
+		JsonNode sourceObject = source.get(keyFieldValue);
+		if(sourceObject == null || sourceObject.isContainerNode()){
+			throw new JsonDiffException(BUNDLE.getMessage("jsonDiff.PrimaryKeyMissing"));
+		}else{
+			if (targetObjectList.contains(sourceObject.asText())) {
+				// Key Matched
+				objectToRemoveList.add(sourceObject.asText());
+				// check if internal Field Matches
+				for (int i = 0; i < targetSize; i++) {
+					if (target.get(i).get(keyFieldValue).equals(sourceObject)) {
+						if (!target.get(i).equals(source)) {
+							// If Content at Source and Target Does not Matches
+							// Sending Data For Replace Operation
+							generateCustomDiffs(processor, pointer, source, target.get(i));
 						}
 					}
 				}
 			} else {
-				// As Given Key is Null, treat whole Object itself as a Key.
-				generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
+				// if here means removed from source then perform remove operation
+				processor.arrayObjectValueRemoved(pointer, source);
 			}
-		} else {
-			/*
-			 * Key is not given, so treat whole object as Key to calculate diff
-			 */
-			generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
 		}
-
+		return;
 	}
 
 	/**
+	 * 
+	 * This Method is used to evaluate custom replace operation within an Array.
+	 * 
 	 * @param processor
 	 * @param pointer
 	 * @param source
+	 *            old json
 	 * @param target
-	 *            This Method is used to evaluate custom replace operation
-	 *            within an Array.
+	 *            new json
+	 * 
 	 */
 	public static void generateCustomDiffs(final DiffProcessor processor, JsonPointer pointer, final JsonNode source,
 			final JsonNode target) {
@@ -653,44 +724,4 @@ public final class JsonDiff {
 			processor.arrayObjectValueReplaced(pointer.append(field), source, target.get(field));
 		}
 	}
-
-	/**
-	 * @param processor
-	 * @param pointer
-	 * @param source
-	 * @param target
-	 *            This method is invoked to find diff in an array element for
-	 *            which key is null or not specified in the Map<JsonPointer,
-	 *            String> provided by user.
-	 */
-	private static void generateArrayDiffForNullOrNoKey(final DiffProcessor processor, final JsonPointer pointer,
-			final ArrayNode source, final ArrayNode target) {
-		{
-			// Treat Whole Thing as an Key itself
-
-			List<JsonNode> targetList = Lists.newArrayList(target.iterator());
-			List<JsonNode> sourceList = Lists.newArrayList(source.iterator());
-			List<JsonNode> sourceListcopy = sourceList;
-
-			// All removed elements are in sourceList
-			sourceList.removeAll(targetList);
-
-			for (int i = 0; i < source.size(); i++) {
-				// Removing each old element at source
-				if (sourceList.contains(source.get(i))) {
-					processor.arrayObjectValueRemoved(pointer.append(i), source.get(i));
-				}
-			}
-
-			// All newly added Elements are in taargetList
-			targetList.removeAll(sourceListcopy);
-
-			// Adding each new Element at Target
-			for (JsonNode eachAddedInTarget : targetList) {
-				processor.valueAdded(pointer.append("-"), eachAddedInTarget);
-			}
-
-		}
-	}
-
 }

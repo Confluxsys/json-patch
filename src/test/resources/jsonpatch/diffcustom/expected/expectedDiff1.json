@@ -1,0 +1,23 @@
+[
+	{
+		"op": "remove",
+		"path": "/Company"
+	},
+	{
+		"op": "replace",
+		"path": "/Grouppp/0/a",
+		"value": "3",
+		"original_value": {
+			"a": "1",
+			"b": "2"
+		}
+	},
+	{
+		"op": "replace",
+		"path": "/Groups/0/name",
+		"value": "b",
+		"original_value": {
+			"Group": "504~QA Managers"
+		}
+	}
+]

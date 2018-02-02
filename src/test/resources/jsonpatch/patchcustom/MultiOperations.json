@@ -1,0 +1,47 @@
+[
+	{
+		"op": "add",
+		"path": "/Role in VEM/-",
+		"value": {
+			"Role": "Automation Tester",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "1516877619926"
+		}
+	},
+	{
+		"op": "remove",
+		"path": "/Role in VEM/?",
+		"value_locator": {
+			"Role": "Automation Tester",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "1516877619926"
+		}
+	},
+	{
+		"op": "add",
+		"path": "/Role in VEM/-",
+		"value": {
+			"Role": "Manual Tester",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "1516875772252"
+		}
+	},
+	{
+		"op": "remove",
+		"path": "/Role in VEM/?",
+		"value_locator": {
+			"Role": "Manual Tester",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "1516875772252"
+		}
+	},
+	{
+		"op": "add",
+		"path": "/Role in VEM/-",
+		"value": {
+			"Role": "QA",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "1516877694966"
+		}
+	}
+]

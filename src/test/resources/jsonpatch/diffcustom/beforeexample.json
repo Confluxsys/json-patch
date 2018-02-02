@@ -1,0 +1,13 @@
+{
+	"name": "xx",
+	"role memberships": [
+		{
+			"role name": "a",
+			"system name": "b",
+			"connect date": "c"
+		}
+	],
+	"objectclass": [
+		"object class name"
+	]
+}

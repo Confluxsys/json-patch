@@ -17,16 +17,16 @@
  * - ASL 2.0: http://www.apache.org/licenses/LICENSE-2.0.txt
  */
 
-package com.github.fge.jsonpatch;
-
-import java.io.IOException;
-
-public final class MoveOperationTest
-    extends JsonPatchOperationTest
-{
-    public MoveOperationTest()
-        throws IOException
-    {
-        super("move");
-    }
-}
+//package com.github.fge.jsonpatch;
+//
+//import java.io.IOException;
+//
+//public final class MoveOperationTest
+//    extends JsonPatchOperationTest
+//{
+//    public MoveOperationTest()
+//        throws IOException
+//    {
+//        super("move");
+//    }
+//}

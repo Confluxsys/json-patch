@@ -26,7 +26,6 @@ import com.github.fge.msgsimple.load.MessageBundleLoader;
 public final class JsonPatchMessages
     implements MessageBundleLoader
 {
-    @Override
     public MessageBundle getBundle()
     {
         return PropertiesBundle.forPath("/com/github/fge/jsonpatch/messages");

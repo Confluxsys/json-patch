@@ -22,6 +22,7 @@ package com.github.fge.jsonpatch.diff;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jackson.JsonNumEquals;
+import com.github.fge.jackson.jsonpointer.JsonPointerException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.google.common.base.Equivalence;
@@ -64,11 +65,11 @@ public final class JsonDiffTest
     @Test(dataProvider = "getPatchesOnly")
     public void generatedPatchAppliesCleanly(final JsonNode first,
         final JsonNode second)
-        throws JsonPatchException
+        throws JsonPatchException, JsonPointerException
     {
         final JsonPatch patch = JsonDiff.asJsonPatch(first, second);
         final Predicate<JsonNode> predicate = EQUIVALENCE.equivalentTo(second);
-        final JsonNode actual = patch.apply(first);
+        final JsonNode actual = patch.apply(first,false);
 
         assertThat(predicate.apply(actual)).overridingErrorMessage(
             "Generated patch failed to apply\nexpected: %s\nactual: %s",

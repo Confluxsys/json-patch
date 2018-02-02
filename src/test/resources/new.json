@@ -1,0 +1,91 @@
+{
+	"Account Login": "DHONI",
+	"Status": "Enabled",
+	"Account ID": "DHONI",
+	"Roles": [
+		{
+			"ROLE": "ERP Role",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "DBA Admin",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "SNOW Admin",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Network Admin",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Finance Admin",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "IAM Admin",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "PSET Role",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "IDM Role",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Principal Engineer Role",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "HBASE",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "HR ROLE",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "SYS ADMIN",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Deployment Owners",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Tally Masters",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Account App Access",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Account Cred Approvers",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Senior Application Developer",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Senior Manager",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "System Admin",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Content Writer",
+			"Account ID": "DHONI"
+		},
+		{
+			"ROLE": "Web Service Admin",
+			"Account ID": "DHONI"
+		}
+	]
+}

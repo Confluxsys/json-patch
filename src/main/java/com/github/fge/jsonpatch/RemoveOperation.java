@@ -68,7 +68,6 @@ public final class RemoveOperation
         return ret;
     }
 
-    @Override
     public void serialize(final JsonGenerator jgen,
         final SerializerProvider provider)
         throws IOException, JsonProcessingException
@@ -79,7 +78,6 @@ public final class RemoveOperation
         jgen.writeEndObject();
     }
 
-    @Override
     public void serializeWithType(final JsonGenerator jgen,
         final SerializerProvider provider, final TypeSerializer typeSer)
         throws IOException, JsonProcessingException

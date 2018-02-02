@@ -1,0 +1,34 @@
+[
+	{
+		"op": "add",
+		"path": "/Profiles/a",
+		"value": [
+			{
+				"a": "b"
+			}
+		]
+	},
+	{
+		"op": "add",
+		"path": "/Profiles/a",
+		"value": [
+			{
+				"a": "b"
+			}
+		]
+	},
+	{
+		"op": "add",
+		"path": "/Extra",
+		"value": {
+			"a": "b"
+		}
+	},
+	{
+		"op": "add",
+		"path": "/Extra",
+		"value": {
+			"a": "b"
+		}
+	}
+]

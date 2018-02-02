@@ -1,0 +1,9 @@
+[
+	{
+		"op": "remove",
+		"path": "/Groups/1",
+		"original_value": {
+			"Group": "504~DEV Managers"
+		}
+	}
+]

@@ -21,12 +21,11 @@ package com.github.fge.jsonpatch;
 
 import java.io.IOException;
 
-public final class CopyOperationTest
-    extends JsonPatchOperationTest
-{
-    public CopyOperationTest()
-        throws IOException
-    {
-        super("copy");
-    }
-}
+//public final class CopyOperationTest
+//    extends JsonPatchOperationTest
+//{
+//   // public CopyOperationTest() throws IOException
+//    {
+//       // super("copy");
+//    }
+//}

@@ -1,0 +1,10 @@
+[
+	{
+		"op": "replace",
+		"path": "/Roles/?/orBidNos",
+		"value":"p-99",
+		"value_locator": {
+			"ROLE": "CAG Developer"
+		}
+	}
+]
