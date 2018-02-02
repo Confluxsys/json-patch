@@ -1,21 +1,36 @@
 {
-	"Application Entitlement": [
-		{
-			"Value": "CFX_Value_11",
-			"Entitlement Name": "624~Web Chatter"
-		}
-	],
-	"Role in VEM": [
-		{
-			"Role": "624~Security Auditors",
-			"Organization or Bid Number": "Confluxsys",
-			"Update Timestamp": "15042479426"
-		}
-	],
-	"Application Role": [
-	],
-	"new":[],
-	"new2":null,
-	"new3": {},
-	"new4":"abc"
+  "Server Type": "ALL",
+  "UD_PSET_PSC": [
+    {
+      "Command": "sudo",
+      "Command Description": "sudoers access",
+      "PAM Flag": true,
+      "POD Flag": false
+    }
+  ],
+  "Server Status": "ALL",
+  "Application": "ALL",
+  "Originating Source": "TODO",
+  "Service Account": true,
+  "Provision Netgroup": true,
+  "Operating System Type": "ALL",
+  "Environment Type": "ALL",
+  "Operating System Name": "ALL",
+  "UPM Server": 104,
+  "UD_PSET_UEG": [
+    {
+      "Group Name": "Financial group"
+    }
+  ],
+  "ID": "25b545f3-5b53-444c-8ec5-c17cfa3a92b5",
+  "Definition Update Time": 1513081214723,
+  "Description": "Ritesh-2 Create E2",
+  "Risk Level": "High",
+  "Technical Service": "ALL",
+  "Owner": "PBULE",
+  "Data Center": "ALL",
+  "Component": "ALL",
+  "Permission Set Name": "R-2 Creating E2",
+  "Environment Name": "ALL",
+  "Display Name": "ALL.All Services.All Applications.R-2 Creating E2"
 }

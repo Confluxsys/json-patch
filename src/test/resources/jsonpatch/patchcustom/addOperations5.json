@@ -1,0 +1,16 @@
+[
+	{
+		"op": "add",
+		"path": "/Groups/-",
+		"value": {
+			"a": "b"
+		}
+	},
+	{
+		"op": "add",
+		"path": "/Groups/-",
+		"value": {
+			"a": "b"
+		}
+	}
+]

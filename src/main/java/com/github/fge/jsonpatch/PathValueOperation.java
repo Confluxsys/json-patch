@@ -52,7 +52,6 @@ public abstract class PathValueOperation
         this.value = value.deepCopy();
     }
 
-    @Override
     public void serialize(final JsonGenerator jgen,
         final SerializerProvider provider)
         throws IOException, JsonProcessingException
@@ -65,7 +64,6 @@ public abstract class PathValueOperation
         jgen.writeEndObject();
     }
 
-    @Override
     public void serializeWithType(final JsonGenerator jgen,
         final SerializerProvider provider, final TypeSerializer typeSer)
         throws IOException, JsonProcessingException

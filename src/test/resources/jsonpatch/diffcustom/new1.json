@@ -3,16 +3,14 @@
 	"Email": "cphatt@abc.com",
 	"Nickname": "CHRISPHATT",
 	"Username": "CHRISPHATT",
-	"Company": {
-		"ConfluxSys": "a"
-	},
 	"Department": "Development",
 	"Last Name": "Chris",
 	"Title": "Mrs",
 	"First Name": "Phatt",
 	"Groups": [
 		{
-			"Group": "504~QA Managers"
+			"Group": "504~QA Managers",
+			"name":"b"
 		}
 	],
 	"Grouppp": [

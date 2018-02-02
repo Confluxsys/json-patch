@@ -19,10 +19,15 @@
 
 package com.github.fge.jsonpatch;
 
-public final class JsonPatchException
+public class JsonPatchException
     extends Exception
 {
-    public JsonPatchException(final String message)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public JsonPatchException(final String message)
     {
         super(message);
     }

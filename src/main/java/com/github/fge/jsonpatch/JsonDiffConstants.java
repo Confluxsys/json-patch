@@ -23,6 +23,7 @@ public class JsonDiffConstants {
 	
 	//Custom Addition to the original Library
 	public static final String ORIGINAL_VALUE = "original_value";
+	public static final String VALUE_LOCATOR = "value_locator";
 	public static final String OLD_VALUE = "oldValue";
 	public static final String NEW_VALUE = "newValue";
 	

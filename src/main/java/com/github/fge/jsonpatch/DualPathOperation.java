@@ -52,7 +52,6 @@ public abstract class DualPathOperation
         this.from = from;
     }
 
-    @Override
     public final void serialize(final JsonGenerator jgen,
         final SerializerProvider provider)
         throws IOException, JsonProcessingException
@@ -64,7 +63,6 @@ public abstract class DualPathOperation
         jgen.writeEndObject();
     }
 
-    @Override
     public final void serializeWithType(final JsonGenerator jgen,
         final SerializerProvider provider, final TypeSerializer typeSer)
         throws IOException, JsonProcessingException

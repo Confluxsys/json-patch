@@ -1,0 +1,10 @@
+[
+	 {
+          "op": "add",
+          "path": "/Roles/-/Username",
+          "value": "testcase",
+          "value_locator": {
+            "ROLE": "Network Admin"
+          }
+        }
+]

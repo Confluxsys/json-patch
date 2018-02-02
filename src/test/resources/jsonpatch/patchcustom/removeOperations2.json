@@ -1,0 +1,9 @@
+[
+	{
+		"op": "remove",
+		"path": "/Roles/?",
+		"value_locator": {
+			"ROLE": "CAG Developer"
+		}
+	}
+]

@@ -5,5 +5,5 @@ META-INF
 out
 build
 .gradle
-
-/README.md
+*/.DS_Store
+.DS_Store

@@ -1,0 +1,9 @@
+[
+	{
+		"op": "add",
+		"path": "/Roles/-",
+		"value": {
+			"Role": "Senior Manager"
+		}
+	}
+]
