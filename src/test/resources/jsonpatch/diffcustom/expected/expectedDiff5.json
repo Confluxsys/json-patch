@@ -1,0 +1,32 @@
+[
+	{
+		"op": "replace",
+		"path": "/Groups/0/Company",
+		"value": "IAM",
+		"original_value": {
+			"Group": "504~QA Managers",
+			"name": "RSFERO",
+			"Company": "Confluxsys"
+		}
+	},
+	{
+		"op": "replace",
+		"path": "/Groups/0/name",
+		"value": null,
+		"original_value": {
+			"Group": "504~QA Managers",
+			"name": "RSFERO",
+			"Company": "Confluxsys"
+		}
+	},
+	{
+		"op": "replace",
+		"path": "/Groups/0/Position",
+		"value": "Developer",
+		"original_value": {
+			"Group": "504~QA Managers",
+			"name": "RSFERO",
+			"Company": "Confluxsys"
+		}
+	}
+]

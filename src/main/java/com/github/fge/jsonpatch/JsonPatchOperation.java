@@ -62,38 +62,64 @@ public abstract class JsonPatchOperation
     protected static final MessageBundle BUNDLE
         = MessageBundles.getBundle(JsonPatchMessages.class);
 
-    protected final String op;
+	protected final String op;
 
-    /*
-     * Note: no need for a custom deserializer, Jackson will try and find a
-     * constructor with a single string argument and use it.
-     *
-     * However, we need to serialize using .toString().
-     */
-    protected final JsonPointer path;
+	/*
+	 * Note: no need for a custom deserializer, Jackson will try and find a
+	 * constructor with a single string argument and use it.
+	 *
+	 * However, we need to serialize using .toString().
+	 */
+	protected JsonPointer path;
 
-    /**
-     * Constructor
-     *
-     * @param op the operation name
-     * @param path the JSON Pointer for this operation
-     */
-    protected JsonPatchOperation(final String op, final JsonPointer path)
-    {
-        this.op = op;
-        this.path = path;
-    }
+	protected JsonNode value_locator;
 
-    /**
-     * Apply this operation to a JSON value
-     *
+	/**
+	 * Constructor
+	 *
+	 * @param op the operation name
+	 * @param path the JSON Pointer for this operation
+	 */
+	protected JsonPatchOperation(final String op, final JsonPointer path) {
+		this.op = op;
+		this.path = path;
+	}
+
+	/**
+	 * Custom Constructor
+	 * 
+	 * @param op  the operation name
+	 * @param path the JSON Pointer for this operation
+	 * @param value_locator the JsonNode for reference to the value
+	 */
+	protected JsonPatchOperation(final String op, final JsonPointer path, final JsonNode value_locator) {
+		this.op = op;
+		this.path = path;
+		this.value_locator = value_locator;
+	}
+
+	/**
+	 * Apply this operation to a JSON value
+	 *
      * @param node the value to patch
-     * @return the patched value
+	 * @return the patched value
      * @throws JsonPatchException operation failed to apply to this value
-     */
-    public abstract JsonNode apply(final JsonNode node)
-        throws JsonPatchException;
+	 */
+	public abstract JsonNode apply(final JsonNode node)
+		throws JsonPatchException;
 
-    @Override
-    public abstract String toString();
+	public String getOp() {
+		return op;
+	}
+
+	public JsonPointer getPath() {
+		return path;
+	}
+
+	public JsonNode getValue_locator() {
+		return value_locator;
+	}
+
+	@Override
+	public abstract String toString();
 }

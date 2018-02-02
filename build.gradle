@@ -44,7 +44,7 @@ apply(plugin: "idea");
 apply(plugin: "eclipse");
 
 group = "com.github.fge";
-version = "1.10-SNAPSHOT";
+version = "1.11-SNAPSHOT";
 description = "JSON Patch (RFC 6902) and JSON Merge Patch (RFC 7386) implementation in Java";
 sourceCompatibility = "1.6";
 targetCompatibility = "1.6"; // defaults to sourceCompatibility
@@ -53,7 +53,7 @@ targetCompatibility = "1.6"; // defaults to sourceCompatibility
  * List of dependencies
  */
 dependencies {
-	testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+	compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 
 	
     provided(group: "com.google.code.findbugs", name: "jsr305",
@@ -128,7 +128,7 @@ task wrapper(type: Wrapper) {
     distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip";
 }
 
-task pom << {
+task pom {
     pom {}.writeTo("${projectDir}/pom.xml");
 }
 

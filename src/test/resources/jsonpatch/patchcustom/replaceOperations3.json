@@ -1,0 +1,11 @@
+[
+	{
+		"op": "replace",
+		"path": "/Roles",
+		"value": [
+			{
+				"ROLE": "CAG Developer"
+			}
+		]
+	}
+]

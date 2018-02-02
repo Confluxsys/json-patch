@@ -1,0 +1,16 @@
+[
+	{
+		"op": "remove",
+		"path": "/Email"
+	},
+	{
+		"op": "add",
+		"path": "/Nickname",
+		"value": "CHRISPHATT"
+	},
+	{
+		"op": "replace",
+		"path": "/Username",
+		"value": "XXXX"
+	}
+]

@@ -68,10 +68,21 @@ final class DiffProcessor {
 		diffs.add(op);
 	}
 
+	/**
+	 *  Method used to remove a Object attribute from an Array
+	 * @param pointer
+	 * @param oldValue
+	 * @param newValue
+	 */
 	void arrayObjectValueReplaced(final JsonPointer pointer, final JsonNode oldValue, final JsonNode newValue) {
 		diffs.add(DiffOperation.arrayObjectReplace(pointer, oldValue, newValue));
 	}
 
+	/**
+	 *  Method used to remove a complete Object from an Array
+	 * @param pointer
+	 * @param value
+	 */
 	void arrayObjectValueRemoved(final JsonPointer pointer, final JsonNode value) {
 		diffs.add(DiffOperation.arrayObjectRemove(pointer, value));
 	}

@@ -1,6 +1,8 @@
-##2.0
+##1.11
+* Addition of new implemtation of json-patch supports a new field name value_locator, more accurate in case of locating and applying patch.
 
-* A new JSON diff implementation; keeping all old stuff as is, this algorithm is more efficient and robust for only providing add, remove and replaced node's from the JSON.  
+##1.10
+* Addition of new implementation of json-diff more accurate.
 
 ## 1.9
 

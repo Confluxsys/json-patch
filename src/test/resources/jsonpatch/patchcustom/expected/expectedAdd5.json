@@ -1,0 +1,29 @@
+{
+	"Account ID": "FRITESH",
+	"Roles": [
+		{
+			"ROLE": "ETL SUPPORT"
+		},
+		{
+			"ROLE": "Network Admin"
+		},
+		{
+			"ROLE": "CAG Developer",
+			"orBidNos": "r-22",
+			"value": "Albert"
+		},
+		{
+			"ROLE": "Cag Content Writter",
+			"orBidNos": "r-33",
+			"value": "Alex"
+		}
+	],
+	"Groups": [
+		{
+			"a": "b"
+		}
+	],
+	"Profiles": {
+	},
+	"Extra": null
+}

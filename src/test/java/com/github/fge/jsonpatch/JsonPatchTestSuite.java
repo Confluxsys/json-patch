@@ -21,6 +21,7 @@ package com.github.fge.jsonpatch;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
+import com.github.fge.jackson.jsonpointer.JsonPointerException;
 import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -68,10 +69,10 @@ public final class JsonPatchTestSuite
 
     @Test(dataProvider = "getTests")
     public void testsFromTestSuitePass(final JsonNode source,
-        final JsonPatch patch, final JsonNode expected, final boolean valid)
+        final JsonPatch patch, final JsonNode expected, final boolean valid) throws JsonPointerException
     {
         try {
-            final JsonNode actual = patch.apply(source);
+            final JsonNode actual = patch.apply(source, false);
             if (!valid)
                 fail("Test was expected to fail!!");
             // Have to do that... TestNG tries to be too smart with regards
