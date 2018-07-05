@@ -21,6 +21,8 @@ package com.github.fge.jsonpatch.diff;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -281,7 +283,7 @@ public final class JsonDiff {
 	 * 
 	 */
 	public static JsonNode asJson(final JsonNode source, final JsonNode target,
-			Map<JsonPointer, String> attributesKeyFields) throws JsonDiffException {
+			Map<JsonPointer, ?> attributesKeyFields) throws JsonDiffException {
 		final String s;
 
 		try {
@@ -312,7 +314,7 @@ public final class JsonDiff {
 	 * 
 	 */
 	public static JsonPatch asJsonPatch(final JsonNode source, final JsonNode target,
-			Map<JsonPointer, String> attributesKeyFields) throws JsonDiffException {
+			Map<JsonPointer, ?> attributesKeyFields) throws JsonDiffException {
 		BUNDLE.checkNotNull(source, "common.nullArgument");
 		BUNDLE.checkNotNull(target, "common.nullArgument");
 
@@ -341,8 +343,9 @@ public final class JsonDiff {
 	 * @throws JsonDiffException 
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	private static void generateDiffs(final DiffProcessor processor, final JsonPointer pointer, final JsonNode source,
-			final JsonNode target, Map<JsonPointer, String> attributesKeyFields)
+			final JsonNode target, Map<JsonPointer, ?> attributesKeyFields)
 			throws JsonDiffException {
 
 		if (EQUIVALENCE.equivalent(source, target))
@@ -415,10 +418,27 @@ public final class JsonDiff {
 			generateObjectDiffs(processor, pointer, (ObjectNode) source, (ObjectNode) target, attributesKeyFields);
 
 		} else {
-			generateArrayDiffs(processor, pointer, (ArrayNode) source, (ArrayNode) target, attributesKeyFields);
-
+			if(attributesKeyFields == null|| attributesKeyFields.isEmpty()){
+				generateArrayDiffForNullOrNoKey(processor, pointer, (ArrayNode) source, (ArrayNode) target);
+			}else{
+				Collection<?> primarykeyCollection = attributesKeyFields.values();
+				
+				for(Object primaryKeyObject: primarykeyCollection){
+					if(primaryKeyObject != null){
+						if(primaryKeyObject instanceof String){
+							generateArrayDiffs(processor, pointer, (ArrayNode) source, (ArrayNode) target, (Map<JsonPointer, String>)attributesKeyFields);
+						}else if(primaryKeyObject instanceof Set){
+							HashMap<JsonPointer, Set<String>> primaryKeyFieldsMap = (HashMap<JsonPointer, Set<String>>)attributesKeyFields;
+							generateArrayDiffs(processor, pointer, (ArrayNode) source, (ArrayNode) target, primaryKeyFieldsMap);
+						}else{
+							logger.info("Primary keys value are expected to be null, String or Set of String");
+							throw new JsonDiffException("Primary keys value are expected to be null, String or Set of String");
+						}
+						break;
+					}
+				}
+			}
 		}
-
 	}
 
 	/**
@@ -439,7 +459,7 @@ public final class JsonDiff {
 	 * 
 	 */
 	private static void generateObjectDiffs(final DiffProcessor processor, final JsonPointer pointer,
-			final ObjectNode source, final ObjectNode target, Map<JsonPointer, String> attributeKeyFields)
+			final ObjectNode source, final ObjectNode target, Map<JsonPointer, ?> attributeKeyFields)
 			throws JsonDiffException {
 		final Set<String> firstFields = Sets.newTreeSet(Sets.newHashSet(source.fieldNames()));
 		final Set<String> secondFields = Sets.newTreeSet(Sets.newHashSet(target.fieldNames()));
@@ -542,9 +562,7 @@ public final class JsonDiff {
 		} else {
 			// Few Added, Few Removed Elements
 			// Null check to Avoid null pointer exception to Map
-			if (attributesKeyFields == null) {
-				generateArrayDiffForNullOrNoKey(processor, pointer, source, target);
-			} else if (attributesKeyFields.containsKey(pointer)) {
+			if (attributesKeyFields.containsKey(pointer)) {
 
 				// Get the Appropriate Key From Map
 				String keyFieldValue = attributesKeyFields.get(pointer);
@@ -668,7 +686,7 @@ public final class JsonDiff {
 	 * 
 	 *
 	 */
-	public static void generateObjectInArrayDiffs(final DiffProcessor processor, JsonPointer pointer,
+	private static void generateObjectInArrayDiffs(final DiffProcessor processor, JsonPointer pointer,
 			final JsonNode source, final JsonNode target, final List<String> targetObjectList,
 			final String keyFieldValue, final List<String> objectToRemoveList,
 			final Map<JsonPointer, String> attributesKeyFields) throws JsonDiffException {
@@ -711,7 +729,7 @@ public final class JsonDiff {
 	 *            new json
 	 * 
 	 */
-	public static void generateCustomDiffs(final DiffProcessor processor, JsonPointer pointer, final JsonNode source,
+	private static void generateCustomDiffs(final DiffProcessor processor, JsonPointer pointer, final JsonNode source,
 			final JsonNode target) {
 		final Set<String> sourceFields = Sets.newTreeSet(Sets.newHashSet(source.fieldNames()));
 		final Set<String> targetFields = Sets.newTreeSet(Sets.newHashSet(target.fieldNames()));
@@ -724,4 +742,88 @@ public final class JsonDiff {
 			processor.arrayObjectValueReplaced(pointer.append(field), source, target.get(field));
 		}
 	}
+
+	/**
+	 * This method is to Find difference between Array Node
+	 * 
+	 * @param processor
+	 * @param pointer
+	 * @param source
+	 *            old json
+	 * @param target
+	 *            new json
+	 * @param attributesKeyFields
+	 *            can be null but needed for denoting custom operations.
+	 * @throws JsonDiffException 
+	 * 
+	 */
+	private static void generateArrayDiffs(final DiffProcessor differenceProcessor, JsonPointer pathPointer,
+			ArrayNode oldJson, ArrayNode newJson, HashMap<JsonPointer, Set<String>> primaryKeyMap)
+			throws JsonDiffException {
+
+		Set<String> primaryKeys = pathValueResolver(primaryKeyMap, pathPointer);
+
+		if (primaryKeys == null || primaryKeys.isEmpty()) {
+			logger.info("As No Map was given so Calculating Array Difference in the form of Add and Remove");
+			generateArrayDiffForNullOrNoKey(differenceProcessor, pathPointer, oldJson, newJson);
+
+		} else {
+			logger.info("Map was given so Calculating Array Difference in the form of Add and Remove and Replace");
+			Map<Map<String, JsonNode>, Integer> oldIndexKeyValueMap = generateMapOfKeysValues(oldJson, primaryKeys);
+
+			Map<Map<String, JsonNode>, Integer> newIndexKeyValueMap = generateMapOfKeysValues(newJson, primaryKeys);
+
+			Set<Map<String, JsonNode>> oldKeyValueSet = oldIndexKeyValueMap.keySet();
+
+			Set<Map<String, JsonNode>> newKeyValueSet = newIndexKeyValueMap.keySet();
+
+			for (Map<String, JsonNode> removeObject : Sets.difference(oldKeyValueSet, newKeyValueSet)) {
+				int oldIndex = oldIndexKeyValueMap.get(removeObject);
+				differenceProcessor.arrayObjectValueRemoved(pathPointer.append(oldIndex), oldJson.get(oldIndex));
+			}
+
+			for (Map<String, JsonNode> addObject : Sets.difference(newKeyValueSet, oldKeyValueSet)) {
+				int newIndex = newIndexKeyValueMap.get(addObject);
+				differenceProcessor.valueAdded(pathPointer.append("-"), newJson.get(newIndex));
+			}
+
+			for (Map<String, JsonNode> replaceObject : Sets.intersection(newKeyValueSet, oldKeyValueSet)) {
+
+				int oldIndex = oldIndexKeyValueMap.get(replaceObject);
+				int newIndex = newIndexKeyValueMap.get(replaceObject);
+				generateCustomDiffs(differenceProcessor, pathPointer.append(oldIndex), oldJson.get(oldIndex),
+						newJson.get(newIndex));
+			}
+		}
+	}
+		
+		private static Set<String> pathValueResolver(Map<JsonPointer, Set<String>> primaryKeyMap, JsonPointer path) {
+			if(primaryKeyMap == null) {
+				return null;
+			}
+			Set<String> primaryKeys = primaryKeyMap.get(path);
+			return primaryKeys;
+		}
+		
+		private static Map<Map<String, JsonNode>, Integer> generateMapOfKeysValues(ArrayNode json, Set<String> primaryKeys)
+				throws JsonDiffException {
+			Map<Map<String, JsonNode>, Integer> indexKeyValueMap = new HashMap<>();
+
+			for (int i = 0; i < json.size(); i++) {
+				JsonNode valueNode = json.get(i);
+				Map<String, JsonNode> keyValueMap = new HashMap<>();
+				for (String primaryKey : primaryKeys) {
+					JsonNode val = valueNode.get(primaryKey);
+					if (val != null) {
+						keyValueMap.put(primaryKey, val);
+					} else {
+						// Primary keys are always expected to be present if the path is given in Map
+						throw new JsonDiffException(BUNDLE.getMessage("jsonDiff.PrimaryKeyMissing"));
+					}
+				}
+				indexKeyValueMap.put(keyValueMap, i);
+			}
+			return indexKeyValueMap;
+		}
+		
 }

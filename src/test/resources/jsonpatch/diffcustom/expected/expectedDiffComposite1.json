@@ -4,11 +4,18 @@
 		"path": "/Company"
 	},
 	{
-		"op": "replace",
-		"path": "/Grouppp/0/Group",
-		"value": "3",
+		"op": "remove",
+		"path": "/Grouppp/0",
 		"original_value": {
 			"Group": "1",
+			"b": "2"
+		}
+	},
+	{
+		"op": "add",
+		"path": "/Grouppp/-",
+		"value": {
+			"Group": "3",
 			"b": "2"
 		}
 	},
