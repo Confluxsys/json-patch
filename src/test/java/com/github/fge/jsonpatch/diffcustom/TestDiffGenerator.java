@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -30,13 +31,17 @@ public class TestDiffGenerator {
 	private JsonNode patch;
 	private Map<JsonPointer, String> attributesKeyFeilds;
 
+	@BeforeTest()
+	public void init() throws JsonPointerException{
+		attributesKeyFeilds = new HashMap<>();
+		attributesKeyFeilds.put(new JsonPointer("/Roles"), "ROLE");
+	}
 	@Test(priority = 1, description = "Missing Primary Key in source ", expectedExceptions = {
 			JsonDiffException.class })
 	public void missingPrimaryAtSource()
 			throws  IOException, JsonPointerException, JsonPatchException {
 
-		attributesKeyFeilds = new HashMap<JsonPointer, String>();
-		attributesKeyFeilds.put(new JsonPointer("/Roles"), "ROLE");
+		
 		JsonNode oldJson = objectMapper.readTree(new File("src/test/resources/old.json"));
 		JsonNode newJson = objectMapper.readTree(new File("src/test/resources/new.json"));
 
@@ -49,8 +54,6 @@ public class TestDiffGenerator {
 	public void missingPrimaryAtDestination()
 			throws IOException, JsonPointerException, JsonPatchException{
 
-		attributesKeyFeilds = new HashMap<JsonPointer, String>();
-		attributesKeyFeilds.put(new JsonPointer("/Roles"), "ROLE");
 		JsonNode oldJson = objectMapper.readTree(new File("src/test/resources/old.json"));
 		JsonNode newJson = objectMapper.readTree(new File("src/test/resources/new.json"));
 
