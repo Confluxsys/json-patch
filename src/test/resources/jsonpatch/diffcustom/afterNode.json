@@ -1,36 +1,9 @@
 {
-  "Server Type": "ALL",
-  "UD_PSET_PSC": [
-    {
-      "Command": "ls",
-      "Command Description": "List Dir structure",
-      "PAM Flag": true,
-      "POD Flag": false
-    }
-  ],
-  "Server Status": "ALL",
-  "Application": "ALL",
-  "Originating Source": "TODO",
-  "Service Account": true,
-  "Provision Netgroup": true,
-  "Operating System Type": "ALL",
-  "Environment Type": "ALL",
-  "Operating System Name": "ALL",
-  "UPM Server": 104,
-  "UD_PSET_UEG": [
-    {
-      "Group Name": "24~cn=HR Managers,ou=groups,dc=confluxsys,dc=com"
-    }
-  ],
-  "ID": "25b545f3-5b53-444c-8ec5-c17cfa3a92b5",
-  "Definition Update Time": 1513080788942,
-  "Description": "Ritesh-2 Create E2",
-  "Risk Level": "High",
-  "Technical Service": "ALL",
-  "Owner": "PBULE",
-  "Data Center": "ALL",
-  "Component": "ALL",
-  "Permission Set Name": "R-2 Creating E2",
-  "Environment Name": "ALL",
-  "Display Name": "ALL.All Services.All Applications.R-2 Creating E2"
-}
+   "Start Time": 1531461038385,
+   "Account ID": "8483",
+   "Permission Set Name": "76842",
+   "Activation Type": "Permanent",
+   "Expiry Time": 1531461038385,
+   "User Login": "RITESHF",
+   "Update Time": 1513846376000
+ }
