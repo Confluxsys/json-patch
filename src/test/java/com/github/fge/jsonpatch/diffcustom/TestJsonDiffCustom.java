@@ -7,7 +7,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jackson.jsonpointer.JsonPointerException;
 import com.github.fge.jsonpatch.JsonDiffConstants;
+import com.github.fge.jsonpatch.JsonDiffException;
 import com.github.fge.jsonpatch.diff.JsonDiff;
 import com.google.common.collect.Lists;
 
@@ -37,30 +37,24 @@ public class TestJsonDiffCustom {
 	private Map<JsonPointer, String> attributesKeyFeilds;
 	@BeforeTest
 	public void initialize() throws JsonPointerException {
-		attributesKeyFeilds = new HashMap<JsonPointer, String>();
 				
-		attributesKeyFeilds = new HashMap<JsonPointer, String>();
+		attributesKeyFeilds = new HashMap<>();
 		attributesKeyFeilds.put(new JsonPointer("/Profiles"), "Profile");
 		attributesKeyFeilds.put(new JsonPointer("/Groups"), "Group");
 		attributesKeyFeilds.put(new JsonPointer("/Roles"), "Role");
 		attributesKeyFeilds.put(new JsonPointer("/User Licenses"), "License");
 		attributesKeyFeilds.put(new JsonPointer("/IT Resource"), null);
-		attributesKeyFeilds.put(new JsonPointer("/Grouppp"), null); //NULL as Key Should return REMOVE AND ADD instead of REPLACE Element itself as KEY
+		attributesKeyFeilds.put(new JsonPointer("/Grouppp"), null); 
+		//NULL as Key Should return REMOVE AND ADD instead of REPLACE Element itself as KEY
 		
 		attributesKeyFeilds.put(new JsonPointer("/a"), "a");
-//		attributesKeyFeilds.put(new JsonPointer("/Application Entitlement"), "Entitlement Name");
-//		attributesKeyFeilds.put(new JsonPointer("/Role in VEM"), "Role");
 	}
 
 	@Test(dataProvider = "Array Operation", dataProviderClass = JsonDataProvider.class)
-	public void testArrayOperation(JsonNode oldState, JsonNode newState) throws JsonPointerException {
+	public void testArrayOperation(JsonNode oldState, JsonNode newState) throws JsonPointerException, JsonDiffException {
 
-		try {
-			patches = JsonDiff.asJson(oldState, newState, attributesKeyFeilds);
-			logger.info("{}", patches.toString());
-		} catch (JsonPointerException e) {
-			logger.warn("WARNING : {} ", e.toString());
-		}
+		patches = JsonDiff.asJson(oldState, newState, attributesKeyFeilds);
+		logger.info("{}", patches.toString());
 
 		// Testing the Truthfulness of Values
 		logger.debug("Total patches to apply are : {}", patches.size());

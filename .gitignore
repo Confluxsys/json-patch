@@ -7,3 +7,7 @@ build
 .gradle
 */.DS_Store
 .DS_Store
+/.settings/*
+/.classpath
+/.project
+test-output/*
