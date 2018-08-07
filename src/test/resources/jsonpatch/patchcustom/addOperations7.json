@@ -5,5 +5,20 @@
 		"value": {
 			"Role": "Senior Manager"
 		}
+	},
+	{
+		"op": "add",
+		"path": "/array/-",
+		"value": {
+			"Role": "Senior Manager"
+		}
+	},
+	{
+		"op": "add",
+		"path": "/object",
+		"value": {
+			"Role": "Senior Manager"
+		}
 	}
+	
 ]
