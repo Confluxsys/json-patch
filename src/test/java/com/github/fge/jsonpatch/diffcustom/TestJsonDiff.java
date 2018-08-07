@@ -19,28 +19,26 @@ import com.github.fge.jsonpatch.JsonDiffException;
 import com.github.fge.jsonpatch.diff.JsonDiff;
 
 public class TestJsonDiff {
-	private Map<JsonPointer, String> attributesKeyFeilds;
+	private Map<JsonPointer, String> attributesKeyFeildsTestJsonDiff;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private ObjectMapper objectMapper;
 
 	@BeforeTest
 	public void initialize() throws JsonPointerException {
 		objectMapper = new ObjectMapper();
-		attributesKeyFeilds = new HashMap<>();
-		attributesKeyFeilds.put(new JsonPointer("/Profiles"), "Profile");
-		attributesKeyFeilds.put(new JsonPointer("/Groups"), "Group");
-		attributesKeyFeilds.put(new JsonPointer("/Roles"), "Role");
-		attributesKeyFeilds.put(new JsonPointer("/User Licenses"), "License");
-		attributesKeyFeilds.put(new JsonPointer("/IT Resource"), null);
-		attributesKeyFeilds.put(new JsonPointer("/Grouppp"), "b");
+		attributesKeyFeildsTestJsonDiff = new HashMap<>();
+		attributesKeyFeildsTestJsonDiff.put(new JsonPointer("/Profiles"), "Profile");
+		attributesKeyFeildsTestJsonDiff.put(new JsonPointer("/Groups"), "Group");
+		attributesKeyFeildsTestJsonDiff.put(new JsonPointer("/Roles"), "Role");
+		attributesKeyFeildsTestJsonDiff.put(new JsonPointer("/User Licenses"), "License");
+		attributesKeyFeildsTestJsonDiff.put(new JsonPointer("/IT Resource"), null);
+		attributesKeyFeildsTestJsonDiff.put(new JsonPointer("/Grouppp"), "b");
 	}
 
 	@Test(dataProvider = "Provide Data To Json-Diff 1", dataProviderClass = JsonDataProvider.class)
 	public void Computing1(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException {
-		JsonNode patch = null;
-	
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeildsTestJsonDiff);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper
@@ -55,8 +53,7 @@ public class TestJsonDiff {
 	@Test(dataProvider = "Provide Data To Json-Diff 2", dataProviderClass = JsonDataProvider.class)
 	public void Computing2(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException {
-		JsonNode patch = null;
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeildsTestJsonDiff);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper
@@ -69,8 +66,7 @@ public class TestJsonDiff {
 	@Test(dataProvider = "Provide Data To Json-Diff 3", dataProviderClass = JsonDataProvider.class)
 	public void Computing3(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException{
-		JsonNode patch = null;
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeildsTestJsonDiff);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper
@@ -83,8 +79,7 @@ public class TestJsonDiff {
 	@Test(dataProvider = "Provide Data To Json-Diff 4", dataProviderClass = JsonDataProvider.class)
 	public void Computing4(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException{
-		JsonNode patch = null;
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeildsTestJsonDiff);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper
@@ -97,8 +92,7 @@ public class TestJsonDiff {
 	@Test(dataProvider = "Provide Data To Json-Diff 5", dataProviderClass = JsonDataProvider.class)
 	public void Computing5(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException{
-		JsonNode patch = null;
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeildsTestJsonDiff);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper
@@ -111,8 +105,7 @@ public class TestJsonDiff {
 	@Test(dataProvider = "Provide Data To Json-Diff 6", dataProviderClass = JsonDataProvider.class)
 	public void Computing6(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException{
-		JsonNode patch = null;
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeildsTestJsonDiff);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper
@@ -125,7 +118,7 @@ public class TestJsonDiff {
 	@Test(dataProvider = "Provide Data To Json-Diff 7", dataProviderClass = JsonDataProvider.class)
 	public void Computing7(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException{
-		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeildsTestJsonDiff);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper.createArrayNode();
@@ -139,11 +132,10 @@ public class TestJsonDiff {
 	@Test(testName = "Test to fix the bug that old state Key's value is null where as new State's Key-> Value is Array, operation is add and not replace...")
 	public void testBugFixWhileOldStateNullAndNewStateArray()
 			throws JsonDiffException, IOException, JsonPointerException{
-		attributesKeyFeilds = null;
 		JsonNode beforeNode = objectMapper
 				.readTree(new File("src/test/resources/jsonpatch/diffcustom/old_nullValue.json"));
 		JsonNode afterNode = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/new_arrayWithValues.json"));
-		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, null);
 		
 		JsonNode expectedPatch = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/expected/expectedDiff_ArrayAdd.json"));
 

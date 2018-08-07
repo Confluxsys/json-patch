@@ -359,33 +359,28 @@ public final class JsonDiff {
 		// Handles Replace null with [] and {} or null with null type cases,
 		// when size is 0, we neglect this case
 
-		if(source.isNull() || (source.isContainerNode() && source.size() == 0)){
-			if(target.isNull() || (target.isContainerNode() && target.size() == 0)){
+		if (source.isNull() || (source.isContainerNode() && source.size() == 0)) {
+			if (target.isNull() || (target.isContainerNode() && target.size() == 0)) {
 				return;
-			}
-			
-			if (target.isArray()) {
+			} else if (target.isArray()) {
 				for (JsonNode eachElementAtTarget : target) {
 					// Adding all Target Array Object one at a time
 					processor.valueAdded(pointer.append("-"), eachElementAtTarget);
 				}
-				return;
 			} else {
 				processor.valueAdded(pointer, target);
-				return;
 			}
-		}else if(target.isNull() || (target.isContainerNode() && target.size() == 0)){
-			if(source.isNull() || (source.isContainerNode() && source.size() == 0)){
+			return;
+		} else if (target.isNull() || (target.isContainerNode() && target.size() == 0)) {
+			if (source.isNull() || (source.isContainerNode() && source.size() == 0)) {
 				return;
-			}
-			
-			if (source.isArray()) {
+			} else if (source.isArray()) {
 				for (int k = 0; k < source.size(); k++) {
 					// Removing Each source Array Objects one at a time
 					processor.arrayObjectValueRemoved(pointer.append(k), source.get(k));
 				}
-				// As the whole Node is processed we returned
 				return;
+				// As the whole Node is processed we returned
 			}
 		}
 		/*
@@ -760,7 +755,7 @@ public final class JsonDiff {
 	 * 
 	 */
 	private static void generateArrayDiffs(final DiffProcessor differenceProcessor, JsonPointer pathPointer,
-			ArrayNode oldJson, ArrayNode newJson, HashMap<JsonPointer, Set<String>> primaryKeyMap)
+			ArrayNode oldJson, ArrayNode newJson,final HashMap<JsonPointer, Set<String>> primaryKeyMap)
 			throws JsonDiffException {
 
 		Set<String> primaryKeys = pathValueResolver(primaryKeyMap, pathPointer);
@@ -799,33 +794,34 @@ public final class JsonDiff {
 		}
 	}
 		
-		private static Set<String> pathValueResolver(Map<JsonPointer, Set<String>> primaryKeyMap, JsonPointer path) {
-			if(primaryKeyMap == null) {
-				return null;
-			}
-			Set<String> primaryKeys = primaryKeyMap.get(path);
-			return primaryKeys;
+	private static Set<String> pathValueResolver(final Map<JsonPointer, Set<String>> primaryKeyMap, JsonPointer path) {
+		Set<String> primaryKeys = null; 
+		if (primaryKeyMap != null) {
+			primaryKeys = primaryKeyMap.get(path);
 		}
-		
-		private static Map<Map<String, JsonNode>, Integer> generateMapOfKeysValues(ArrayNode json, Set<String> primaryKeys)
-				throws JsonDiffException {
-			Map<Map<String, JsonNode>, Integer> indexKeyValueMap = new HashMap<>();
+		return primaryKeys;
+	}
 
-			for (int i = 0; i < json.size(); i++) {
-				JsonNode valueNode = json.get(i);
-				Map<String, JsonNode> keyValueMap = new HashMap<>();
-				for (String primaryKey : primaryKeys) {
-					JsonNode val = valueNode.get(primaryKey);
-					if (val != null) {
-						keyValueMap.put(primaryKey, val);
-					} else {
-						// Primary keys are always expected to be present if the path is given in Map
-						throw new JsonDiffException(BUNDLE.getMessage("jsonDiff.PrimaryKeyMissing"));
-					}
+	private static Map<Map<String, JsonNode>, Integer> generateMapOfKeysValues(ArrayNode json, Set<String> primaryKeys)
+			throws JsonDiffException {
+		Map<Map<String, JsonNode>, Integer> indexKeyValueMap = new HashMap<>();
+
+		for (int i = 0; i < json.size(); i++) {
+			JsonNode valueNode = json.get(i);
+			Map<String, JsonNode> keyValueMap = new HashMap<>();
+			for (String primaryKey : primaryKeys) {
+				JsonNode val = valueNode.get(primaryKey);
+				if (val != null) {
+					keyValueMap.put(primaryKey, val);
+				} else {
+					// Primary keys are always expected to be present if the
+					// path is given in Map
+					throw new JsonDiffException(BUNDLE.getMessage("jsonDiff.PrimaryKeyMissing"));
 				}
-				indexKeyValueMap.put(keyValueMap, i);
 			}
-			return indexKeyValueMap;
+			indexKeyValueMap.put(keyValueMap, i);
 		}
+		return indexKeyValueMap;
+	}
 		
 }
