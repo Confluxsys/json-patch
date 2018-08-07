@@ -359,38 +359,33 @@ public final class JsonDiff {
 		// Handles Replace null with [] and {} or null with null type cases,
 		// when size is 0, we neglect this case
 
-		if(source.isNull()){
-			if(target.isContainerNode() && target.size() == 0){
+		if(source.isNull() || (source.isContainerNode() && source.size() == 0)){
+			if(target.isNull() || (target.isContainerNode() && target.size() == 0)){
 				return;
 			}
-		}else if(target.isNull()){
-			if(source.isContainerNode() && source.size() == 0){
+			
+			if (target.isArray()) {
+				for (JsonNode eachElementAtTarget : target) {
+					// Adding all Target Array Object one at a time
+					processor.valueAdded(pointer.append("-"), eachElementAtTarget);
+				}
+				return;
+			} else {
+				processor.valueAdded(pointer, target);
 				return;
 			}
-		}else if (source.isContainerNode() && target.isContainerNode()){
-			// All add Elements
-			if (source.size() == 0 && target.size() != 0) {
-				if (secondType == NodeType.ARRAY) {
-					for (JsonNode eachElementAtTarget : target) {
-						// Adding all Target Array Object one at a time
-						processor.valueAdded(pointer.append("-"), eachElementAtTarget);
-					}
-					return;
-				} else {
-					processor.valueAdded(pointer, target);
-					return;
-				}
+		}else if(target.isNull() || (target.isContainerNode() && target.size() == 0)){
+			if(source.isNull() || (source.isContainerNode() && source.size() == 0)){
+				return;
 			}
-			// All Remove Elements
-			else if (source.size() != 0 && target.size() == 0) {
-				if (firstType == NodeType.ARRAY) {
-					for (int k = 0; k < source.size(); k++) {
-						// Removing Each source Array Objects one at a time
-						processor.arrayObjectValueRemoved(pointer.append(k), source.get(k));
-					}
-					// As the whole Node is processed we returned
-					return;
+			
+			if (source.isArray()) {
+				for (int k = 0; k < source.size(); k++) {
+					// Removing Each source Array Objects one at a time
+					processor.arrayObjectValueRemoved(pointer.append(k), source.get(k));
 				}
+				// As the whole Node is processed we returned
+				return;
 			}
 		}
 		/*

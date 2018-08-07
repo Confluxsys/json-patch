@@ -1,0 +1,22 @@
+[
+	{
+		"op": "add",
+		"path": "/a/-",
+		"value": "a"
+	},
+	{
+		"op": "add",
+		"path": "/a/-",
+		"value": "b"
+	},
+	{
+		"op": "replace",
+		"path": "/b",
+		"value": null
+	},
+	{
+		"op": "add",
+		"path": "/c",
+		"value": 1
+	}
+]

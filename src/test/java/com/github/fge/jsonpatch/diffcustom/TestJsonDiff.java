@@ -125,8 +125,7 @@ public class TestJsonDiff {
 	@Test(dataProvider = "Provide Data To Json-Diff 7", dataProviderClass = JsonDataProvider.class)
 	public void Computing7(JsonNode beforeNode, JsonNode afterNode)
 			throws JsonDiffException, IOException, JsonPointerException{
-		JsonNode patch = null;
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
 		logger.info("{}", patch.toString());
 
 		JsonNode expectedPatch = objectMapper.createArrayNode();
@@ -141,12 +140,15 @@ public class TestJsonDiff {
 	public void testBugFixWhileOldStateNullAndNewStateArray()
 			throws JsonDiffException, IOException, JsonPointerException{
 		attributesKeyFeilds = null;
-		JsonNode patch = null;
 		JsonNode beforeNode = objectMapper
-				.readTree(new File("src/test/resources/jsonpatch/diffcustom/beforeNode.json"));
-		JsonNode afterNode = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/afterNode.json"));
-		patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+				.readTree(new File("src/test/resources/jsonpatch/diffcustom/old_nullValue.json"));
+		JsonNode afterNode = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/new_arrayWithValues.json"));
+		JsonNode patch = JsonDiff.asJson(beforeNode, afterNode, attributesKeyFeilds);
+		
+		JsonNode expectedPatch = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/expected/expectedDiff_ArrayAdd.json"));
+
 		logger.info("{}", patch.toString());
+		Assert.assertEquals(patch, expectedPatch);
 
 	}
 
