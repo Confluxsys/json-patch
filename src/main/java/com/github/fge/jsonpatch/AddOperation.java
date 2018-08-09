@@ -99,7 +99,7 @@ public final class AddOperation extends PathValueOperation {
 		 * to work.
 		 */
 		final JsonNode parentNode = path.parent().path(node);
-		if (parentNode.isMissingNode()) {
+		if (parentNode.isMissingNode() || parentNode.isNull()) {
 			// throw new
 			// JsonPatchException(BUNDLE.getMessage("jsonPatch.noSuchParent"));
 
@@ -130,7 +130,7 @@ public final class AddOperation extends PathValueOperation {
 
 				if (preexistingPath.get(node).isArray()) {
 					return addToArray(node, preexistingPath, newValue);
-				} else {
+				} else{
 					return addToObject(node, preexistingPath, newValue);
 				}
 
@@ -139,6 +139,7 @@ public final class AddOperation extends PathValueOperation {
 			}
 
 		}
+		
 		if (!parentNode.isContainerNode()) {
 			if (!parentNode.isValueNode())
 				throw new JsonPatchException(BUNDLE.getMessage("jsonPatch.parentNotContainer"));

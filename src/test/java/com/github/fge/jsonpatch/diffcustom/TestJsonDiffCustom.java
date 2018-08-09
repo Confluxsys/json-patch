@@ -34,26 +34,26 @@ public class TestJsonDiffCustom {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private JsonNode patches;
-	private Map<JsonPointer, String> attributesKeyFeilds;
+	private Map<JsonPointer, String> attributesKeyFeildsTestJsonDiffCustom;
 	@BeforeTest
 	public void initialize() throws JsonPointerException {
 				
-		attributesKeyFeilds = new HashMap<>();
-		attributesKeyFeilds.put(new JsonPointer("/Profiles"), "Profile");
-		attributesKeyFeilds.put(new JsonPointer("/Groups"), "Group");
-		attributesKeyFeilds.put(new JsonPointer("/Roles"), "Role");
-		attributesKeyFeilds.put(new JsonPointer("/User Licenses"), "License");
-		attributesKeyFeilds.put(new JsonPointer("/IT Resource"), null);
-		attributesKeyFeilds.put(new JsonPointer("/Grouppp"), null); 
+		attributesKeyFeildsTestJsonDiffCustom = new HashMap<>();
+		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Profiles"), "Profile");
+		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Groups"), "Group");
+		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Roles"), "Role");
+		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/User Licenses"), "License");
+		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/IT Resource"), null);
+		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Grouppp"), null); 
 		//NULL as Key Should return REMOVE AND ADD instead of REPLACE Element itself as KEY
 		
-		attributesKeyFeilds.put(new JsonPointer("/a"), "a");
+		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/a"), "a");
 	}
 
 	@Test(dataProvider = "Array Operation", dataProviderClass = JsonDataProvider.class)
 	public void testArrayOperation(JsonNode oldState, JsonNode newState) throws JsonPointerException, JsonDiffException {
 
-		patches = JsonDiff.asJson(oldState, newState, attributesKeyFeilds);
+		patches = JsonDiff.asJson(oldState, newState, attributesKeyFeildsTestJsonDiffCustom);
 		logger.info("{}", patches.toString());
 
 		// Testing the Truthfulness of Values
