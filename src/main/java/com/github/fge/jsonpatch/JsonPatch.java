@@ -184,13 +184,16 @@ public final class JsonPatch implements JsonSerializable {
 	public JsonNode apply(final JsonNode node, final boolean performStrictValidation) throws JsonPatchException {
 		BUNDLE.checkNotNull(node, "jsonPatch.nullInput");
 		List<JsonPatchOperation> finalJsonPatchOperations = new ArrayList<>(operations.size());
-		List<JsonPatchOperation> addOrUpdateJsonPatch = new ArrayList<>();
+		List<JsonPatchOperation> updateJsonPatch = new ArrayList<>();
+		List<JsonPatchOperation> addJsonPatch = new ArrayList<>();
 		List<JsonPatchOperation> patchesToRemove = new ArrayList<>();
 		//map of parent, map of index and corresponding json patch
 		Map<String, TreeMap<Integer, JsonPatchOperation>> mapOfMultivaluedAttributesPatches = new HashMap<>();
 		for (JsonPatchOperation operation : operations) {
-			if (operation.getOp().equals("add") || operation.getOp().equals("replace")) {
-				addOrUpdateJsonPatch.add(operation);
+			if (operation.getOp().equals("add") ){
+				addJsonPatch.add(operation);
+			} else if(operation.getOp().equals("replace")) {
+				updateJsonPatch.add(operation);
 			} else if (!operation.getPath().parent().isEmpty()) {
 				String lastIndex = Iterables.getLast(operation.getPath()).getToken().getRaw();
 				try {
@@ -214,8 +217,9 @@ public final class JsonPatch implements JsonSerializable {
 		for(Map.Entry<String, TreeMap<Integer,JsonPatchOperation>> multiValuedAttributePatches : mapOfMultivaluedAttributesPatches.entrySet()) {
 			patchesToRemove.addAll(multiValuedAttributePatches.getValue().values());
 		}
+		finalJsonPatchOperations.addAll(updateJsonPatch);
 		finalJsonPatchOperations.addAll(patchesToRemove);
-		finalJsonPatchOperations.addAll(addOrUpdateJsonPatch);
+		finalJsonPatchOperations.addAll(addJsonPatch);
 		JsonNode ret = node.deepCopy();
 		for (final JsonPatchOperation operation : finalJsonPatchOperations) {
 			JsonPointer path = operation.getPath();
