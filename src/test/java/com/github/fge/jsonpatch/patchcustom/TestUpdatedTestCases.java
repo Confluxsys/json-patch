@@ -32,6 +32,7 @@ public class TestUpdatedTestCases {
 
 	}
 
+	///FIXME : this is broken, The original JSON do not have "Role in VEM" key and fails as solution is trying to order the operations.
 	@Test(priority = 1)
 	public void testMultipleChanges() throws JsonProcessingException, IOException, JsonPatchException {
 		Boolean performStrictValidation = false;

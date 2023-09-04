@@ -71,6 +71,7 @@ public final class JsonPatchTest {
 		}
 	}
 
+	//FIXME : this is broken as JSON Patch is expecting operation to be present always.
 	@Test
 	public void operationsAreCalledInOrder() throws JsonPatchException, JsonPointerException {
 		final JsonNode node1 = FACTORY.textNode("hello");
