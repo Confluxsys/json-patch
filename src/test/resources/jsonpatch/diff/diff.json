@@ -115,7 +115,7 @@
         ]
     },
     {
-        "message": "similar element is copied instead of added",
+        "message": "New Element added in object",
         "first": {
             "a": "c"
         },
@@ -124,15 +124,39 @@
             "d": "c"
         },
         "patch": [
-            { "op": "copy", "path": "/d", "from": "/a" }
+            { "op": "add", "path": "/d", "value":"c" }
         ]
     },
     {
-        "message": "similar element removed then added is moved instead",
+        "message": "Element key changed",
         "first": { "a": "b" },
         "second": { "c": "b" },
         "patch": [
-            { "op": "move", "path": "/c", "from": "/a" }
+            {"op":"remove","path":"/a"},{"op":"add","path":"/c","value":"b"}
+        ]
+    },
+    {
+        "message": "New array property added.",
+        "first": { "a": "b"},
+        "second": { "a": "b", "x": ["b", "c"] },
+        "patch": [
+            { "op": "add", "path": "/x", "value": ["b", "c"] }
+        ]
+    },
+    {
+        "message": "Empty Array has a new value",
+        "first": { "a": "b", "x": []},
+        "second": { "a": "b", "x": ["b"] },
+        "patch": [
+            { "op": "add", "path": "/x/-", "value": "b" }
+        ]
+    },
+    {
+        "message": "Array has a new value",
+        "first": { "a": "b", "x": ["p"]},
+        "second": { "a": "b", "x": ["p","b"] },
+        "patch": [
+            { "op": "add", "path": "/x/-", "value": "b" }
         ]
     }
 ]
