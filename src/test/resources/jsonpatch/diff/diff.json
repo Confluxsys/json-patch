@@ -144,6 +144,14 @@
         ]
     },
     {
+        "message": "Null property became an array.",
+        "first": { "a": "b","x": null},
+        "second": { "a": "b", "x": ["b", "c"] },
+        "patch": [
+            { "op": "replace", "path": "/x", "value": ["b", "c"] }
+        ]
+    },
+    {
         "message": "Empty Array has a new value",
         "first": { "a": "b", "x": []},
         "second": { "a": "b", "x": ["b"] },

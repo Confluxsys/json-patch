@@ -6,6 +6,7 @@ package com.github.fge.jsonpatch.diffcustom;
 import java.io.File;
 import java.io.IOException;
 
+import com.github.fge.jackson.jsonpointer.JsonPointerException;
 import org.testng.annotations.DataProvider;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -71,5 +72,34 @@ public class JsonDataProvider {
 		JsonNode samplenew = objectMapper.readTree(new File("src/test/resources/jsonpatch/diffcustom/samplenew.json"));
 		
 		return new Object[][] { { sampleold, samplenew } };
+	}
+
+	@DataProvider(name = "Array Operation")
+	public static Object[][] dataForArrayRemoveOperaation()
+			throws JsonPointerException, JsonProcessingException, IOException {
+
+		JsonNode arrayObjectRemovalOLD = objectMapper
+				.readTree(new File("src/test/resources/jsonpatch/diffcustom/arrayObjectRemovalOLD.json"));
+		JsonNode arrayObjectRemovalNEW = objectMapper
+				.readTree(new File("src/test/resources/jsonpatch/diffcustom/arrayObjectRemovalNEW.json"));
+
+		JsonNode arrayObjectReplaceOLD = objectMapper
+				.readTree(new File("src/test/resources/jsonpatch/diffcustom/arrayObjectReplaceOLD.json"));
+		JsonNode arrayObjectReplaceNEW = objectMapper
+				.readTree(new File("src/test/resources/jsonpatch/diffcustom/arrayObjectReplaceNEW.json"));
+
+		JsonNode arrayObjectAddOLD = objectMapper
+				.readTree(new File("src/test/resources/jsonpatch/diffcustom/arrayObjectAddOLD.json"));
+		JsonNode arrayObjectAddNEW = objectMapper
+				.readTree(new File("src/test/resources/jsonpatch/diffcustom/arrayObjectAddNEW.json"));
+
+		return new Object[][] {
+				{ arrayObjectRemovalOLD, arrayObjectRemovalNEW }, // Remove
+				{ arrayObjectRemovalNEW, arrayObjectRemovalOLD }, // add
+				{ arrayObjectReplaceOLD, arrayObjectReplaceNEW }, // replace
+				{ arrayObjectReplaceNEW, arrayObjectReplaceOLD }, // replace
+				{ arrayObjectAddOLD, arrayObjectAddNEW }, // add
+				{ arrayObjectAddNEW, arrayObjectAddOLD }, // remove
+		};
 	}
 }

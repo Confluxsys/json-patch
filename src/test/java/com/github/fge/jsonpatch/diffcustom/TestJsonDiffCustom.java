@@ -38,16 +38,16 @@ public class TestJsonDiffCustom {
 	@BeforeTest
 	public void initialize() throws JsonPointerException {
 				
-		attributesKeyFeildsTestJsonDiffCustom = new HashMap<>();
-		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Profiles"), "Profile");
-		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Groups"), "Group");
-		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Roles"), "Role");
-		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/User Licenses"), "License");
-		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/IT Resource"), null);
-		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Grouppp"), null); 
-		//NULL as Key Should return REMOVE AND ADD instead of REPLACE Element itself as KEY
-		
-		attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/a"), "a");
+			attributesKeyFeildsTestJsonDiffCustom = new HashMap<>();
+			attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Profiles"), "Profile");
+			attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Groups"), "Group");
+			attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Roles"), "Role");
+			attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/User Licenses"), "License");
+			attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/IT Resource"), null);
+			attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/Grouppp"), null);
+			//NULL as Key Should return REMOVE AND ADD instead of REPLACE Element itself as KEY
+
+			attributesKeyFeildsTestJsonDiffCustom.put(new JsonPointer("/a"), "a");
 	}
 
 	@Test(dataProvider = "Array Operation", dataProviderClass = JsonDataProvider.class)
@@ -135,4 +135,5 @@ public class TestJsonDiffCustom {
 			// Not an Array Add Operation
 		}
 	}
+
 }
