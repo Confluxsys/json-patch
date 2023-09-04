@@ -55,6 +55,13 @@ final class DiffProcessor {
 	}
 
 	void valueAdded(final JsonPointer pointer, final JsonNode value) {
+		/*
+			XXX Confluxsys Custom: The change applied by PDHARM
+			We want to treat array as Set, so we will not have copy or move operations.
+			The change applied to treat all the additions in array as Add operation only.
+			Otherwise JSONDiff generates copy and move operations.
+		 */
+		/*
 		final int removalIndex = findPreviouslyRemoved(value);
 		if (removalIndex != -1) {
 			final DiffOperation removed = diffs.get(removalIndex);
@@ -62,10 +69,12 @@ final class DiffProcessor {
 			diffs.add(DiffOperation.move(removed.getFrom(), value, pointer, value));
 			return;
 		}
+
 		final JsonPointer ptr = findUnchangedValue(value);
 		final DiffOperation op = ptr != null ? DiffOperation.copy(ptr, pointer, value) : DiffOperation.add(pointer, value);
-
 		diffs.add(op);
+		*/
+		diffs.add(DiffOperation.add(pointer, value));
 	}
 
 	/**
