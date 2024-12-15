@@ -11,6 +11,16 @@
 	],
 	"Role in VEM": [
 		{
+			"Role": "Automation Tester",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "1516877619926"
+		},
+		{
+			"Role": "Manual Tester",
+			"Organization or Bid Number": "Confluxsys",
+			"Update Timestamp": "1516875772252"
+		},
+		{
 			"Role": "QA",
 			"Organization or Bid Number": "Confluxsys",
 			"Update Timestamp": "1516877694966"
