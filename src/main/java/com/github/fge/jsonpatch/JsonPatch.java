@@ -28,15 +28,14 @@ import com.github.fge.jackson.JacksonUtils;
 import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.msgsimple.bundle.MessageBundle;
 import com.github.fge.msgsimple.load.MessageBundles;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.StreamSupport;
 
 
 /**
@@ -133,7 +132,8 @@ public final class JsonPatch implements JsonSerializable {
 	 */
 	@JsonCreator
 	public JsonPatch(final List<JsonPatchOperation> operations) {
-		this.operations = ImmutableList.copyOf(operations);
+
+        this.operations = Collections.unmodifiableList(new ArrayList<>(operations));
 	}
 
 	/**
@@ -280,7 +280,7 @@ public final class JsonPatch implements JsonSerializable {
 		final JsonNode presentNode = newPath.get(node);
 
 		// All the Field names to List
-		List<String> valueLocatorFields = Lists.newArrayList(valueLocator.fieldNames());
+		List<String> valueLocatorFields = StreamSupport.stream(((Iterable<String>) valueLocator::fieldNames).spliterator(), false).toList();
 		if (presentNode.isArray()) {
 			/*
 			 * Take all the key:values to match from value_locator to Map.

@@ -22,11 +22,8 @@ package com.github.fge.jsonpatch.diff;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jackson.JsonNumEquals;
-import com.github.fge.jackson.jsonpointer.JsonPointerException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
-import com.google.common.base.Equivalence;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -37,57 +34,52 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public final class JsonDiffTest
-{
-    private static final Equivalence<JsonNode> EQUIVALENCE
-        = JsonNumEquals.getInstance();
+public final class JsonDiffTest {
+    private static final JsonNumEquals EQUIVALENCE
+            = JsonNumEquals.getInstance();
 
     private final JsonNode testData;
 
     public JsonDiffTest()
-        throws IOException
-    {
+            throws IOException {
         final String resource = "/jsonpatch/diff/diff.json";
         testData = JsonLoader.fromResource(resource);
     }
 
     @DataProvider
-    public Iterator<Object[]> getPatchesOnly()
-    {
+    public Iterator<Object[]> getPatchesOnly() {
         final List<Object[]> list = Lists.newArrayList();
 
-        for (final JsonNode node: testData)
-            list.add(new Object[] { node.get("first"), node.get("second") });
+        for (final JsonNode node : testData)
+            list.add(new Object[]{node.get("first"), node.get("second")});
 
         return list.iterator();
     }
 
     @Test(dataProvider = "getPatchesOnly")
     public void generatedPatchAppliesCleanly(final JsonNode first,
-        final JsonNode second)
-        throws JsonPatchException, JsonPointerException
-    {
+                                             final JsonNode second)
+            throws JsonPatchException {
         final JsonPatch patch = JsonDiff.asJsonPatch(first, second);
-        final Predicate<JsonNode> predicate = EQUIVALENCE.equivalentTo(second);
-        final JsonNode actual = patch.apply(first,false);
+        final JsonNode actual = patch.apply(first);
 
-        assertThat(predicate.apply(actual)).overridingErrorMessage(
-            "Generated patch failed to apply\nexpected: %s\nactual: %s",
-            second, actual
+        assertThat(EQUIVALENCE.equivalent(second, actual)).overridingErrorMessage(
+                "Generated patch failed to apply\nexpected: %s\nactual: %s",
+                second, actual
         ).isTrue();
     }
 
+
     @DataProvider
-    public Iterator<Object[]> getLiteralPatches()
-    {
+    public Iterator<Object[]> getLiteralPatches() {
         final List<Object[]> list = Lists.newArrayList();
 
-        for (final JsonNode node: testData) {
+        for (final JsonNode node : testData) {
             if (!node.has("patch"))
                 continue;
-            list.add(new Object[] {
-                node.get("message").textValue(), node.get("first"),
-                node.get("second"), node.get("patch")
+            list.add(new Object[]{
+                    node.get("message").textValue(), node.get("first"),
+                    node.get("second"), node.get("patch")
             });
         }
 
@@ -95,19 +87,16 @@ public final class JsonDiffTest
     }
 
     @Test(
-        dataProvider = "getLiteralPatches",
-        dependsOnMethods = "generatedPatchAppliesCleanly"
+            dataProvider = "getLiteralPatches",
+            dependsOnMethods = "generatedPatchAppliesCleanly"
     )
     public void generatedPatchesAreWhatIsExpected(final String message,
-        final JsonNode first, final JsonNode second, final JsonNode expected)
-    {
+                                                  final JsonNode first, final JsonNode second, final JsonNode expected) {
         final JsonNode actual = JsonDiff.asJson(first, second);
-        final Predicate<JsonNode> predicate
-            = EQUIVALENCE.equivalentTo(expected);
 
-        assertThat(predicate.apply(actual)).overridingErrorMessage(
-            "patch is not what was expected\nscenario: %s\n"
-            + "expected: %s\nactual: %s\n", message, expected, actual
+        assertThat(EQUIVALENCE.equivalent(expected, actual)).overridingErrorMessage(
+                "patch is not what was expected\nscenario: %s\n"
+                        + "expected: %s\nactual: %s\n", message, expected, actual
         ).isTrue();
     }
 }

@@ -104,6 +104,6 @@ public final class JsonPatchTest {
 			assertEquals(e.getMessage(), message);
 		}
 
-		verifyZeroInteractions(op2);
+		verifyNoMoreInteractions(op2);
 	}
 }

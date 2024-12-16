@@ -22,12 +22,17 @@ package com.github.fge.jsonpatch.diff;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -48,11 +53,6 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchMessages;
 import com.github.fge.msgsimple.bundle.MessageBundle;
 import com.github.fge.msgsimple.load.MessageBundles;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Equivalence;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * JSON "diff" implementation
@@ -88,7 +88,7 @@ public final class JsonDiff {
 	private static final MessageBundle BUNDLE = MessageBundles.getBundle(JsonPatchMessages.class);
 	private static final ObjectMapper MAPPER = JacksonUtils.newMapper();
 
-	private static final Equivalence<JsonNode> EQUIVALENCE = JsonNumEquals.getInstance();
+	private static final JsonNumEquals EQUIVALENCE = JsonNumEquals.getInstance();
 	private static Logger logger = LoggerFactory.getLogger(JsonDiff.class);
 
 	private JsonDiff() {
@@ -175,18 +175,45 @@ public final class JsonDiff {
 
 	private static void generateObjectDiffs(final DiffProcessor processor, final JsonPointer pointer,
 			final ObjectNode source, final ObjectNode target) {
-		final Set<String> firstFields = Sets.newTreeSet(Sets.newHashSet(source.fieldNames()));
-		final Set<String> secondFields = Sets.newTreeSet(Sets.newHashSet(target.fieldNames()));
+		final Set<String> firstFields
+				= collect(source.fieldNames(), new TreeSet<>());
+		final Set<String> secondFields
+				= collect(target.fieldNames(), new TreeSet<>());
 
-		for (final String field : Sets.difference(firstFields, secondFields))
+		final Set<String> copy1 = new TreeSet<>(firstFields);
+		copy1.removeAll(secondFields);
+
+		for (final String field: copy1)
 			processor.valueRemoved(pointer.append(field), source.get(field));
 
-		for (final String field : Sets.difference(secondFields, firstFields))
+		final Set<String> copy2 = new TreeSet<>(secondFields);
+		copy2.removeAll(firstFields);
+
+		for (final String field: copy2)
 			processor.valueAdded(pointer.append(field), target.get(field));
 
-		for (final String field : Sets.intersection(firstFields, secondFields))
-			generateDiffs(processor, pointer.append(field), source.get(field), target.get(field));
+		final Set<String> intersection = new TreeSet<>(firstFields);
+		intersection.retainAll(secondFields);
+
+		for (final String field: intersection)
+			generateDiffs(processor, pointer.append(field), source.get(field),
+					target.get(field));
 	}
+
+    private static <T> Set<T> collect(Iterator<T> from, Set<T> to) {
+        if (from == null) {
+            throw new NullPointerException();
+        }
+        if (to == null) {
+            throw new NullPointerException();
+        }
+        while (from.hasNext()) {
+            to.add(from.next());
+        }
+        return Collections.unmodifiableSet(to);
+    }
+
+
 
 	private static void generateArrayDiffs(final DiffProcessor processor, final JsonPointer pointer,
 			final ArrayNode source, final ArrayNode target) {
@@ -209,9 +236,10 @@ public final class JsonDiff {
 			processor.valueAdded(pointer.append("-"), target.get(index));
 	}
 
-	@VisibleForTesting
-	static Map<JsonPointer, JsonNode> getUnchangedValues(final JsonNode source, final JsonNode target) {
-		final Map<JsonPointer, JsonNode> ret = Maps.newHashMap();
+	static Map<JsonPointer, JsonNode> getUnchangedValues(final JsonNode source,
+														 final JsonNode target)
+	{
+		final Map<JsonPointer, JsonNode> ret = new HashMap<>();
 		computeUnchanged(ret, JsonPointer.empty(), source, target);
 		return ret;
 	}
@@ -447,7 +475,7 @@ public final class JsonDiff {
 	 *            old json
 	 * @param target
 	 *            new json
-	 * @param attributesKeyFields
+	 * @param attributeKeyFields
 	 *            can be null but needed for denoting custom operations.
 	 * @throws IOException
 	 * @throws JsonPointerException
@@ -458,17 +486,20 @@ public final class JsonDiff {
 	private static void generateObjectDiffs(final DiffProcessor processor, final JsonPointer pointer,
 			final ObjectNode source, final ObjectNode target, Map<JsonPointer, ?> attributeKeyFields)
 			throws JsonDiffException {
-		final Set<String> firstFields = Sets.newTreeSet(Sets.newHashSet(source.fieldNames()));
-		final Set<String> secondFields = Sets.newTreeSet(Sets.newHashSet(target.fieldNames()));
+		final Set<String> firstFields
+				= collect(source.fieldNames(), new TreeSet<>());
+		final Set<String> secondFields
+				= collect(target.fieldNames(), new TreeSet<>());
 		// this for loop is for calculating removed elements
 
 		/*
 		 * This loop evaluates the Fields at source that are not in target Node
 		 */
-		for (final String field : Sets.difference(firstFields, secondFields)) {
+		Set<String> firstBuNotSecond = firstFields.stream().filter(f -> !secondFields.contains(f)).collect(Collectors.toSet());
+		for (final String field : firstBuNotSecond) {
 			// Element To Remove
 			JsonNode fieldValue = source.get(field);
-			if ((fieldValue.size() != 0)) {
+			if ((!fieldValue.isEmpty())) {
 				// Source removal Array
 				if (fieldValue.isArray()) {
 					for (int index = 0; index < fieldValue.size(); index++) {
@@ -492,7 +523,9 @@ public final class JsonDiff {
 		/*
 		 * This loop evaluates the Fields at target that are not in source Node
 		 */
-		for (final String field : Sets.difference(secondFields, firstFields)) {
+		Set<String> secondButNotFirst = secondFields.stream().filter(f -> !firstFields.contains(f)).collect(Collectors.toSet());
+
+		for (final String field : secondButNotFirst) {
 			// ADD Element
 			JsonNode fieldValue = target.get(field);
 			if ((fieldValue.size() != 0)) {
@@ -519,7 +552,9 @@ public final class JsonDiff {
 		/*
 		 * This loop evaluates the common elements in both nodes
 		 */
-		for (final String field : Sets.intersection(firstFields, secondFields)) {
+		Set<String> intersection = new TreeSet<>(firstFields);
+		intersection.retainAll(secondFields);
+		for (final String field : intersection) {
 			// REPLACE OR COMMON Elements
 			generateDiffs(processor, pointer.append(field), source.get(field), target.get(field), attributeKeyFields);
 		}
@@ -627,8 +662,9 @@ public final class JsonDiff {
 			logger.debug("Key Field Not Available for Pointer at  : {}", pointer);
 			// Treat Whole Thing as an Key itself
 
-			List<JsonNode> toAddList = Lists.newArrayList(target.iterator());
-			List<JsonNode> toRemoveList = new ArrayList<JsonNode>();
+			List<JsonNode> toAddList = StreamSupport.stream(target.spliterator(), false).toList();
+
+            List<JsonNode> toRemoveList = new ArrayList<>();
 			//
 			// for (JsonNode eachTargetElement : target) {
 			// // add All Target Elements to TargetList
@@ -728,28 +764,37 @@ public final class JsonDiff {
 	 */
 	private static void generateCustomDiffs(final DiffProcessor processor, JsonPointer pointer, final JsonNode source,
 			final JsonNode target) {
-		final Set<String> sourceFields = Sets.newTreeSet(Sets.newHashSet(source.fieldNames()));
-		final Set<String> targetFields = Sets.newTreeSet(Sets.newHashSet(target.fieldNames()));
+		final Set<String> sourceFields = convertIteratorToTreeSet(source.fieldNames());
+		final Set<String> targetFields = convertIteratorToTreeSet(target.fieldNames());
 		for (String field : sourceFields) {
 			if (!(source.get(field).equals(target.get(field)))) {
 				processor.arrayObjectValueReplaced(pointer.append(field), source, target.get(field));
 			}
 		}
-		for (final String field : Sets.difference(targetFields, sourceFields)) {
+
+		for (final String field : targetFields.stream().filter(f -> !sourceFields.contains(f)).collect(Collectors.toSet())) {
 			processor.arrayObjectValueReplaced(pointer.append(field), source, target.get(field));
 		}
+	}
+
+	public static TreeSet<String> convertIteratorToTreeSet(Iterator<String> iterator) {
+		TreeSet<String> treeSet = new TreeSet<>();
+		while (iterator.hasNext()) {
+			treeSet.add(iterator.next());
+		}
+		return treeSet;
 	}
 
 	/**
 	 * This method is to Find difference between Array Node
 	 * 
-	 * @param processor
-	 * @param pointer
-	 * @param source
+	 * @param differenceProcessor
+	 * @param pathPointer
+	 * @param oldJson
 	 *            old json
-	 * @param target
+	 * @param newJson
 	 *            new json
-	 * @param attributesKeyFields
+	 * @param primaryKeyMap
 	 *            can be null but needed for denoting custom operations.
 	 * @throws JsonDiffException 
 	 * 
@@ -774,22 +819,20 @@ public final class JsonDiff {
 
 			Set<Map<String, JsonNode>> newKeyValueSet = newIndexKeyValueMap.keySet();
 
-			for (Map<String, JsonNode> removeObject : Sets.difference(oldKeyValueSet, newKeyValueSet)) {
+			for (Map<String, JsonNode> removeObject : oldKeyValueSet.stream().filter(e -> !newKeyValueSet.contains(e)).collect(Collectors.toSet())) {
 				int oldIndex = oldIndexKeyValueMap.get(removeObject);
 				differenceProcessor.arrayObjectValueRemoved(pathPointer.append(oldIndex), oldJson.get(oldIndex));
 			}
 
-			for (Map<String, JsonNode> addObject : Sets.difference(newKeyValueSet, oldKeyValueSet)) {
+			for (Map<String, JsonNode> addObject : newKeyValueSet.stream().filter(e -> !oldKeyValueSet.contains(e)).collect(Collectors.toSet())) {
 				int newIndex = newIndexKeyValueMap.get(addObject);
 				differenceProcessor.valueAdded(pathPointer.append("-"), newJson.get(newIndex));
 			}
 
-			for (Map<String, JsonNode> replaceObject : Sets.intersection(newKeyValueSet, oldKeyValueSet)) {
-
+			for (Map<String, JsonNode> replaceObject : newKeyValueSet.stream().filter(oldKeyValueSet::contains).collect(Collectors.toSet())) {
 				int oldIndex = oldIndexKeyValueMap.get(replaceObject);
 				int newIndex = newIndexKeyValueMap.get(replaceObject);
-				generateCustomDiffs(differenceProcessor, pathPointer.append(oldIndex), oldJson.get(oldIndex),
-						newJson.get(newIndex));
+				generateCustomDiffs(differenceProcessor, pathPointer.append(oldIndex), oldJson.get(oldIndex), newJson.get(newIndex));
 			}
 		}
 	}

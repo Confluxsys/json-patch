@@ -19,6 +19,7 @@
 package com.github.fge.jsonpatch;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,8 +31,6 @@ import com.github.fge.jackson.jsonpointer.JsonPointer;
 import com.github.fge.jackson.jsonpointer.JsonPointerException;
 import com.github.fge.jackson.jsonpointer.ReferenceToken;
 import com.github.fge.jackson.jsonpointer.TokenResolver;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * JSON Patch {@code add} operation
@@ -81,7 +80,7 @@ import com.google.common.collect.Lists;
 public final class AddOperation extends PathValueOperation {
 	private static final ReferenceToken LAST_ARRAY_ELEMENT = ReferenceToken.fromRaw("-");
 
-	private ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@JsonCreator
 	public AddOperation(@JsonProperty("path") final JsonPointer path, @JsonProperty("value") final JsonNode value) {
@@ -168,7 +167,7 @@ public final class AddOperation extends PathValueOperation {
 		final JsonNode ret = node.deepCopy();
 		final ArrayNode target = (ArrayNode) path.parent().get(ret);
 
-		List<JsonNode> existingValues = Lists.newArrayList(target);
+		List<JsonNode> existingValues = StreamSupport.stream(target.spliterator(), false).toList();
 		// check duplicate
 		if (!existingValues.contains(value)) {
 			final TokenResolver<JsonNode> token = Iterables.getLast(path);
@@ -229,7 +228,7 @@ public final class AddOperation extends PathValueOperation {
 			if (newValue.isArray()) {
 				throw new JsonPatchException(BUNDLE.getMessage("jsonPatch.noSuchIndex"));
 			} else {
-				List<String> fieldNames = Lists.newArrayList(newValue.fieldNames());
+				List<String> fieldNames = StreamSupport.stream(((Iterable<String>) newValue::fieldNames).spliterator(), false).toList();
 				for (String fieldName : fieldNames) {
 					((ObjectNode) ret).put(fieldName, newValue.get(fieldName));
 				}
@@ -249,7 +248,8 @@ public final class AddOperation extends PathValueOperation {
 			} else if (lastOfPath.matches("[0-9]+")) {
 				if (newValue.isObject()) {
 					// All the Field names to List
-					List<String> fieldNames = Lists.newArrayList(newValue.fieldNames());
+
+					List<String> fieldNames = StreamSupport.stream(((Iterable<String>) newValue::fieldNames).spliterator(), false).toList();
 					for (String fieldName : fieldNames) {
 						((ObjectNode) target).put(fieldName, newValue.get(fieldName));
 					}
@@ -280,8 +280,8 @@ public final class AddOperation extends PathValueOperation {
 	/**
 	 * This method is used to create the non-existing path
 	 * 
-	 * @param node
 	 * @param path
+	 * @param value
 	 * @return
 	 */
 	private JsonNode pathBuilder(JsonPointer path, JsonNode value) {

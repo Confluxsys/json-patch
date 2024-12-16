@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.github.fge.jsonpatch.JsonPatchException;
-import com.google.common.base.Preconditions;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
@@ -38,7 +37,10 @@ final class NonObjectMergePatch
 
     NonObjectMergePatch(final JsonNode node)
     {
-        this.node = Preconditions.checkNotNull(node);
+        if (node == null) {
+            throw new NullPointerException();
+        }
+        this.node = node;
     }
 
     @Override
@@ -49,6 +51,7 @@ final class NonObjectMergePatch
         return node;
     }
 
+    @Override
     public void serialize(final JsonGenerator jgen,
         final SerializerProvider provider)
         throws IOException, JsonProcessingException
@@ -56,6 +59,7 @@ final class NonObjectMergePatch
         jgen.writeTree(node);
     }
 
+    @Override
     public void serializeWithType(final JsonGenerator jgen,
         final SerializerProvider provider, final TypeSerializer typeSer)
         throws IOException, JsonProcessingException

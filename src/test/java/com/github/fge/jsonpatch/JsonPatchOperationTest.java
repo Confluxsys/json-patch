@@ -26,7 +26,6 @@ import com.github.fge.jackson.JsonLoader;
 import com.github.fge.jackson.JsonNumEquals;
 import com.github.fge.msgsimple.bundle.MessageBundle;
 import com.github.fge.msgsimple.load.MessageBundles;
-import com.google.common.base.Equivalence;
 import com.google.common.collect.Lists;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -41,7 +40,7 @@ import static org.testng.Assert.*;
 public abstract class JsonPatchOperationTest {
 	private static final MessageBundle BUNDLE = MessageBundles.getBundle(JsonPatchMessages.class);
 
-	private static final Equivalence<JsonNode> EQUIVALENCE = JsonNumEquals.getInstance();
+	private static final JsonNumEquals EQUIVALENCE = JsonNumEquals.getInstance();
 
 	private final JsonNode errors;
 	private final JsonNode ops;
