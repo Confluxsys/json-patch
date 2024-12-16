@@ -5,12 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.fge</groupId>
 	<artifactId>json-patch</artifactId>
-	<version>1.12.3-SNAPSHOT</version>
+	<version>1.12.4_CFX-RELEASE</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<slf4j.version>1.7.13</slf4j.version>
 		<logback.version>1.0.13</logback.version>
 	</properties>
